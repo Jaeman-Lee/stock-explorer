@@ -9,4 +9,4 @@ build/
 *.egg-info/
 .env
 *.db
-data/journals/
+# data/journals/ — 저널은 추적함
