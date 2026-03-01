@@ -1,0 +1,16 @@
+# stock-explorer 의존성
+# fin-advisor의 requirements.txt에서 관련 패키지를 계승
+
+# 데이터 수집
+yfinance>=0.2.36
+
+# 데이터 처리
+pandas>=2.0.0
+numpy>=1.24.0
+
+# 기술적 지표 (ta 라이브러리 사용 — pandas-ta는 py3.12+ 필요)
+ta>=0.11.0
+
+# 테스트
+pytest>=7.4.0
+pytest-cov>=4.0.0
