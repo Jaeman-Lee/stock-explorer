@@ -63,15 +63,27 @@ save_journal(result)                     # data/journals/ 저장
 | fundamentals={} | max_score 산정 오류 | has_debt_data 플래그로 조건부 처리 |
 | pandas_ta 없음 (py3.11) | ImportError | ta 라이브러리로 대체 |
 
+## GitHub Actions
+
+| 워크플로우 | 파일 | 스케줄 | 내용 |
+|-----------|------|--------|------|
+| CI | `ci.yml` | push/PR | pytest 자동 실행 |
+| Daily Highlights | `daily-highlights.yml` | 평일 10:00 KST | `--universe --min-signal BUY` |
+| Weekend Full Scan | `weekly-scan.yml` | 토요일 10:00 KST | `--universe` (전체) |
+
+Actions 봇이 결과를 `data/journals/`에 자동 커밋.
+`workflow_dispatch`로 수동 실행 가능.
+
 ## 개발 환경
 
 - Python 3.11, ta 0.11.0, yfinance 1.2.0, pandas 3.0.1
 - pytest 9.0.2 / 테스트: `python3 -m pytest tests/ -v`
-- SSH: Jaeman-Lee 계정 기본 (`~/.ssh/id_ed25519_jaeman`)
+- SSH: `git@github.com` → Jaeman-Lee 기본 (`~/.ssh/id_ed25519_jaeman`)
+- beautifulNH: `git@github-beautifulNH:...` 별칭 사용
 - Notion DB: 프로젝트 (3169b0eb-a8a0-801c-9f7c-cafdf8f0e434)
 
 ## 세션 이력
 
 | 날짜 | 주요 작업 |
 |------|----------|
-| 2026-03-02 | 초기 구조 + 6 에이전트 구현, D/E 보정, 테스트 11/11, GitHub 레포 생성, SSH 전환 |
+| 2026-03-02 | 초기 구조 + 6 에이전트 구현, D/E 보정, 테스트 11/11, 6종목 실행, GitHub 레포·Actions 설정, SSH 전환, Notion 등록 |
