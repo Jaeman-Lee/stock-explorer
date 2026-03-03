@@ -1,11 +1,11 @@
 # 종목 탐험 리포트: NKE (NIKE, Inc.)
-> 분석 시각: 2026-03-03T03:28:32
+> 분석 시각: 2026-03-03T13:54:45
 
 ## 최종 판정
-**⬆ 매수검토** | 신뢰도 **76%** | 합의 유형: **의견분열**
+**⬆ 매수검토** | 신뢰도 **80%** | 합의 유형: **의견분열**
 
 ### 투표 집계
-- 긍정 3표 / 중립 1표 / 부정 2표
+- 긍정 2표 / 중립 2표 / 부정 2표
 
 ## 에이전트별 의견
 ### fundamental-analyst — ➡ 관심종목 (신뢰도 50%)
@@ -79,20 +79,20 @@
 - ROE 18% — 업종 상위권
 - 영업 레버리지 3.3x — 규모의 경제 작동
 
-### momentum-analyst — ⬆ 매수검토 (신뢰도 69%)
-> 기술적 매수 우세 (64%). RSI 41 — 저RSI 진입 기회.
+### momentum-analyst — ➡ 관심종목 (신뢰도 50%)
+> 기술적 중립 (55%). 추세 방향 확인 후 진입.
 
 **핵심 지표:**
-- `rsi_14`: 41.5
-- `macd`: -0.22
-- `macd_signal`: -0.01
-- `macd_hist`: -0.209
-- `bollinger_position_pct`: 10.2
-- `momentum_score`: 48/75 (64%)
+- `rsi_14`: 42.6
+- `macd`: -0.186
+- `macd_signal`: -0.004
+- `macd_hist`: -0.182
+- `bollinger_position_pct`: 16.3
+- `momentum_score`: 41/75 (55%)
 
 **강점:**
-- RSI 41 — 저RSI 진입 기회
-- 볼린저 하단 근접 (10%) — 과매도 반등 구간
+- RSI 43 — 저RSI 진입 기회
+- 볼린저 하단부 (16%) — 저점 매수 기회
 
 **리스크:**
 - ⚠️ MACD 데드크로스 또는 약세 구간
@@ -122,14 +122,6 @@
 
 **growth-analyst** → *moat-analyst*: growth-analyst이(가) moat-analyst에 반박: '어느 정도의 경쟁우위 (69%). 매출총이익률 41% — 업종 상위권.' — 그러나 성장성 미흡 (18%). EPS 역성장 -32.1%.
 
-**momentum-analyst** → *valuation-analyst*: momentum-analyst이(가) valuation-analyst에 반박: '심각한 고평가 (9%). trailing P/E 35.7x — 심각한 고평가; EV/EBITDA 24.5x — 섹터 대비 고평가.' — 그러나 기술적 매수 우세 (64%). RSI 41 — 저RSI 진입 기회.
-
-**valuation-analyst** → *momentum-analyst*: valuation-analyst이(가) momentum-analyst에 반박: '기술적 매수 우세 (64%). RSI 41 — 저RSI 진입 기회.' — 그러나 심각한 고평가 (9%). trailing P/E 35.7x — 심각한 고평가; EV/EBITDA 24.5x — 섹터 대비 고평가.
-
-**momentum-analyst** → *growth-analyst*: momentum-analyst이(가) growth-analyst에 반박: '성장성 미흡 (18%). EPS 역성장 -32.1%.' — 그러나 기술적 매수 우세 (64%). RSI 41 — 저RSI 진입 기회.
-
-**growth-analyst** → *momentum-analyst*: growth-analyst이(가) momentum-analyst에 반박: '기술적 매수 우세 (64%). RSI 41 — 저RSI 진입 기회.' — 그러나 성장성 미흡 (18%). EPS 역성장 -32.1%.
-
 **risk-analyst** → *valuation-analyst*: risk-analyst이(가) valuation-analyst에 반박: '심각한 고평가 (9%). trailing P/E 35.7x — 심각한 고평가; EV/EBITDA 24.5x — 섹터 대비 고평가.' — 그러나 매우 낮은 리스크 (0%). Net Debt/EBITDA 0.8x — 부채 상환 여유 충분, 양호한 유동성 current ratio 2.1x.
 
 **valuation-analyst** → *risk-analyst*: valuation-analyst이(가) risk-analyst에 반박: '매우 낮은 리스크 (0%). Net Debt/EBITDA 0.8x — 부채 상환 여유 충분, 양호한 유동성 current ratio 2.1x.' — 그러나 심각한 고평가 (9%). trailing P/E 35.7x — 심각한 고평가; EV/EBITDA 24.5x — 섹터 대비 고평가.
@@ -139,7 +131,7 @@
 **growth-analyst** → *risk-analyst*: growth-analyst이(가) risk-analyst에 반박: '매우 낮은 리스크 (0%). Net Debt/EBITDA 0.8x — 부채 상환 여유 충분, 양호한 유동성 current ratio 2.1x.' — 그러나 성장성 미흡 (18%). EPS 역성장 -32.1%.
 
 ## 투자 thesis
-매출총이익률 41% — 업종 상위권 | RSI 41 — 저RSI 진입 기회 | Net Debt/EBITDA 0.8x — 부채 상환 여유 충분
+매출총이익률 41% — 업종 상위권 | Net Debt/EBITDA 0.8x — 부채 상환 여유 충분
 
 ## 핵심 리스크
 

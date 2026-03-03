@@ -1,5 +1,5 @@
 # 종목 탐험 리포트: MA (Mastercard Incorporated)
-> 분석 시각: 2026-03-03T03:28:26
+> 분석 시각: 2026-03-03T13:54:41
 
 ## 최종 판정
 **⬆⬆ 강력매수** | 신뢰도 **84%** | 합의 유형: **다수결**
@@ -55,8 +55,8 @@
 - `revenue_growth_yoy_pct`: 17.6
 - `eps_growth_yoy_pct`: 24.2
 - `revenue_cagr_3y_pct`: 13.8
-- `analyst_upside_pct`: 26.7
-- `analyst_count`: 35
+- `analyst_upside_pct`: 27.0
+- `analyst_count`: 34
 - `growth_trend`: stable
 - `growth_score`: 59/90 (66%)
 

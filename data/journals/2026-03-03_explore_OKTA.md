@@ -1,5 +1,5 @@
 # 종목 탐험 리포트: OKTA (Okta, Inc.)
-> 분석 시각: 2026-03-03T03:28:45
+> 분석 시각: 2026-03-03T13:54:55
 
 ## 최종 판정
 **⬆ 매수검토** | 신뢰도 **79%** | 합의 유형: **의견분열**
@@ -54,15 +54,15 @@
 - `revenue_growth_yoy_pct`: 11.6
 - `eps_growth_yoy_pct`: 156.0
 - `revenue_cagr_3y_pct`: 26.2
-- `analyst_upside_pct`: 47.5
-- `analyst_count`: 40
+- `analyst_upside_pct`: 46.4
+- `analyst_count`: 41
 - `growth_trend`: decelerating
 - `growth_score`: 72/90 (80%)
 
 **강점:**
 - EPS 고성장 +156% YoY
 - 3년 매출 CAGR 26% — 지속적 고성장
-- 애널리스트 컨센서스 상승 여력 48%
+- 애널리스트 컨센서스 상승 여력 46%
 
 **리스크:**
 - ⚠️ 성장 둔화 추이

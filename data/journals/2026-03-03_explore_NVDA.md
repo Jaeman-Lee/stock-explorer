@@ -1,5 +1,5 @@
 # 종목 탐험 리포트: NVDA (NVIDIA Corporation)
-> 분석 시각: 2026-03-03T03:28:21
+> 분석 시각: 2026-03-03T13:54:37
 
 ## 최종 판정
 **⬆⬆ 강력매수** | 신뢰도 **90%** | 합의 유형: **다수결**
@@ -55,7 +55,7 @@
 - `revenue_growth_yoy_pct`: 73.2
 - `eps_growth_yoy_pct`: 95.6
 - `revenue_cagr_3y_pct`: 100.0
-- `analyst_upside_pct`: 44.6
+- `analyst_upside_pct`: 44.8
 - `analyst_count`: 58
 - `growth_trend`: sharp_decline
 - `growth_score`: 81/90 (90%)
