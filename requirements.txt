@@ -11,6 +11,9 @@ numpy>=1.24.0
 # 기술적 지표 (ta 라이브러리 사용 — pandas-ta는 py3.12+ 필요)
 ta>=0.11.0
 
+# HTTP (Telegram Bot API)
+requests>=2.31.0
+
 # 테스트
 pytest>=7.4.0
 pytest-cov>=4.0.0

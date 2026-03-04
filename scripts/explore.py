@@ -6,6 +6,7 @@
     python scripts/explore.py --universe         # 기본 유니버스 전체
     python scripts/explore.py --dry-run AAPL     # 저널 저장 안 함
     python scripts/explore.py --min-signal BUY   # 특정 신호 이상만 출력
+    python scripts/explore.py --notify --universe # 결과 Telegram 전송
 """
 
 from __future__ import annotations
@@ -28,6 +29,7 @@ def explore_ticker(
     ticker: str,
     dry_run: bool = False,
     min_signal: Signal | None = None,
+    notify: bool = False,
 ) -> None:
     """단일 종목을 탐험하고 결과를 출력한다."""
     print(f"\n[{ticker}] 데이터 수집 중...", end="", flush=True)
@@ -60,6 +62,12 @@ def explore_ticker(
         journal_path = save_journal(result, JOURNALS_DIR)
         print(f"  리포트 저장: {journal_path}")
 
+    # Telegram 전송
+    if notify:
+        from src.telegram.sender import send_exploration_result
+        send_exploration_result(result)
+        print(f"  Telegram 전송 완료")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="투자 종목 탐험기")
@@ -75,6 +83,9 @@ def main() -> None:
         choices=["STRONG_BUY", "BUY", "WATCH", "PASS", "AVOID"],
         default=None,
         help="이 신호 이상인 종목만 출력",
+    )
+    parser.add_argument(
+        "--notify", action="store_true", help="결과를 Telegram으로 전송"
     )
     args = parser.parse_args()
 
@@ -93,7 +104,7 @@ def main() -> None:
 
     results_summary = []
     for ticker in tickers:
-        explore_ticker(ticker.upper(), dry_run=args.dry_run, min_signal=min_signal)
+        explore_ticker(ticker.upper(), dry_run=args.dry_run, min_signal=min_signal, notify=args.notify)
 
     print("\n탐험 완료.")
 

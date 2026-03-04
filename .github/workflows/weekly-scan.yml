@@ -24,7 +24,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run full universe scan (전체 신호)
-        run: python scripts/explore.py --universe
+        run: python scripts/explore.py --universe --notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Commit scan results
         run: |

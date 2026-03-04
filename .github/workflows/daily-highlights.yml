@@ -24,7 +24,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run highlights scan (BUY 이상만)
-        run: python scripts/explore.py --universe --min-signal BUY
+        run: python scripts/explore.py --universe --min-signal BUY --notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Commit scan results
         run: |
