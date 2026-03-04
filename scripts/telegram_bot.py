@@ -59,6 +59,7 @@ AUTHORIZED_CHAT_ID = int(TELEGRAM_CHAT_ID) if TELEGRAM_CHAT_ID else None
 
 # 한국어 티커 별칭
 TICKER_ALIASES: dict[str, str] = {
+    # 한국어
     "삼성전자": "005930.KS",
     "하이닉스": "000660.KS",
     "sk하이닉스": "000660.KS",
@@ -72,6 +73,17 @@ TICKER_ALIASES: dict[str, str] = {
     "아마존": "AMZN",
     "메타": "META",
     "테슬라": "TSLA",
+    # 오타/약칭 교정
+    "gogl": "GOOGL",
+    "goog": "GOOGL",
+    "google": "GOOGL",
+    "msft": "MSFT",
+    "aapl": "AAPL",
+    "nvda": "NVDA",
+    "amzn": "AMZN",
+    "tsla": "TSLA",
+    "brk": "BRK-B",
+    "brkb": "BRK-B",
 }
 
 logging.basicConfig(
@@ -275,7 +287,7 @@ def handle_message(text: str, chat_id: int):
     elif lower in ("탑픽", "/top", "top"):
         handle_top(chat_id)
 
-    elif lower.startswith(("/explore ", "탐험 ")):
+    elif lower.startswith(("/explore ", "/explorer ", "탐험 ")):
         ticker = parts[1].strip() if len(parts) > 1 else ""
         if ticker:
             handle_explore(chat_id, ticker)
