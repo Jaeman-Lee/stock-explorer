@@ -22,7 +22,7 @@ from src.agents.models import Signal
 from src.agents.moderator import ExplorationModerator
 from src.output.formatter import format_terminal, save_journal
 from src.pipeline.context_builder import build_context
-from src.utils.config import DEFAULT_UNIVERSE, JOURNALS_DIR
+from src.utils.config import DEFAULT_UNIVERSE, EU_UNIVERSE, DE_STOCKS, EU_STOCKS, JOURNALS_DIR
 
 
 def explore_ticker(
@@ -73,7 +73,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="투자 종목 탐험기")
     parser.add_argument("tickers", nargs="*", help="분석할 종목 심볼")
     parser.add_argument(
-        "--universe", action="store_true", help="기본 유니버스 전체 탐험"
+        "--universe", action="store_true", help="기본 유니버스 전체 탐험 (미국)"
+    )
+    parser.add_argument(
+        "--eu", action="store_true", help="유럽 유니버스 탐험 (독일 .DE + 범유럽)"
+    )
+    parser.add_argument(
+        "--eu-all", action="store_true", help="미국 + 유럽 전체 탐험"
     )
     parser.add_argument(
         "--dry-run", action="store_true", help="저널 파일 저장 안 함"
@@ -92,6 +98,10 @@ def main() -> None:
     tickers = args.tickers
     if args.universe:
         tickers = DEFAULT_UNIVERSE
+    elif args.eu:
+        tickers = DE_STOCKS + EU_STOCKS
+    elif args.eu_all:
+        tickers = EU_UNIVERSE
 
     if not tickers:
         parser.print_help()

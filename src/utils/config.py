@@ -45,8 +45,41 @@ KR_STOCKS = [
     "051910.KS",  # LG화학
 ]
 
+# 독일 주식 (XETRA / Frankfurt, .DE)
+DE_STOCKS = [
+    "SAP.DE",   # SAP — 유럽 최대 소프트웨어
+    "SIE.DE",   # Siemens — 산업/에너지 자동화
+    "ALV.DE",   # Allianz — 글로벌 보험
+    "MRK.DE",   # Merck KGaA — 제약/라이프사이언스
+    "BAYN.DE",  # Bayer — 제약/농업
+    "BMW.DE",   # BMW — 프리미엄 자동차
+    "ADS.DE",   # Adidas — 스포츠웨어
+    "DTE.DE",   # Deutsche Telekom — 통신 (T-Mobile 모회사)
+    "BAS.DE",   # BASF — 화학
+    "RWE.DE",   # RWE — 재생에너지
+]
+
+# 유럽 주식 (범유럽 우량주)
+EU_STOCKS = [
+    "ASML.AS",  # ASML — 반도체 장비 독점 (네덜란드)
+    "MC.PA",    # LVMH — 명품 그룹 (프랑스)
+    "AIR.PA",   # Airbus — 항공기 제조 (프랑스)
+    "OR.PA",    # L'Oréal — 화장품 (프랑스)
+    "TTE.PA",   # TotalEnergies — 에너지 (프랑스)
+    "SAN.PA",   # Sanofi — 제약 (프랑스)
+    "NESN.SW",  # Nestlé — 식품 (스위스)
+    "NOVN.SW",  # Novartis — 제약 (스위스)
+    "ROG.SW",   # Roche — 제약/진단 (스위스)
+    "SHEL.L",   # Shell — 에너지 (영국)
+    "AZN.L",    # AstraZeneca — 제약 (영국)
+    "ULVR.L",   # Unilever — 소비재 (영국)
+]
+
 # 기본 탐험 유니버스 (전체 대상)
 DEFAULT_UNIVERSE = US_LARGE_CAP + GROWTH_CANDIDATES
+
+# 유럽 포함 확장 유니버스
+EU_UNIVERSE = DEFAULT_UNIVERSE + DE_STOCKS + EU_STOCKS
 
 # ── 기술적 지표 기본값 (fin-advisor와 동일) ─────────────────────────────────
 RSI_PERIOD = 14
