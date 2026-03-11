@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run highlights scan (BUY 이상만)
-        run: python scripts/explore.py --universe --min-signal BUY --notify
+      - name: Run highlights scan (사전 스크리닝 → BUY 이상)
+        run: python scripts/explore.py --eu-all --prescreen --min-signal BUY --notify
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

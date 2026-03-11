@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run full universe scan (전체 신호)
-        run: python scripts/explore.py --universe --notify
+      - name: Run full universe scan (사전 스크리닝 → 전체 신호)
+        run: python scripts/explore.py --eu-all --prescreen --notify
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

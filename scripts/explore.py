@@ -23,6 +23,7 @@ from src.agents.moderator import ExplorationModerator
 from src.output.formatter import format_terminal, save_journal
 from src.pipeline.context_builder import build_context
 from src.utils.config import DEFAULT_UNIVERSE, EU_UNIVERSE, DE_STOCKS, EU_STOCKS, JOURNALS_DIR
+from src.utils.config import DAX40, EU_DEFENSE, EU_ENERGY, EU_TECH
 
 
 def explore_ticker(
@@ -76,10 +77,14 @@ def main() -> None:
         "--universe", action="store_true", help="기본 유니버스 전체 탐험 (미국)"
     )
     parser.add_argument(
-        "--eu", action="store_true", help="유럽 유니버스 탐험 (독일 .DE + 범유럽)"
+        "--eu", action="store_true", help="유럽 유니버스 탐험 (DAX 40 + EU 섹터)"
     )
     parser.add_argument(
         "--eu-all", action="store_true", help="미국 + 유럽 전체 탐험"
+    )
+    parser.add_argument(
+        "--prescreen", action="store_true",
+        help="사전 스크리닝: 전체 유니버스 점수화 후 상위 30종목만 풀 분석"
     )
     parser.add_argument(
         "--dry-run", action="store_true", help="저널 파일 저장 안 함"
@@ -99,9 +104,15 @@ def main() -> None:
     if args.universe:
         tickers = DEFAULT_UNIVERSE
     elif args.eu:
-        tickers = DE_STOCKS + EU_STOCKS
+        tickers = DAX40 + EU_DEFENSE + EU_ENERGY + EU_TECH
     elif args.eu_all:
         tickers = EU_UNIVERSE
+
+    if args.prescreen and tickers:
+        from src.pipeline.universe_builder import build_full_universe
+        from src.pipeline.prescreener import prescreen
+        universe = build_full_universe() if args.eu_all else list(tickers)
+        tickers = prescreen(universe, top_n=30, defense_min=5)
 
     if not tickers:
         parser.print_help()
