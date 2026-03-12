@@ -64,7 +64,11 @@ def make_context(ticker: str = "TEST", **overrides) -> StockAnalysisContext:
         ],
     }
     defaults.update(overrides)
-    return StockAnalysisContext(**defaults)
+    ctx = StockAnalysisContext(**defaults)
+    # Auto-compute data quality for realistic confidence penalties
+    from src.pipeline.data_validator import assess_data_quality
+    ctx.data_quality = assess_data_quality(ctx.fundamentals, ctx.market_data)
+    return ctx
 
 
 class TestFundamentalAgent:
@@ -240,5 +244,97 @@ class TestExplorationModerator:
         risk_op = next(
             (o for o in result.opinions if o.agent_name == "risk-analyst"), None
         )
-        if risk_op and risk_op.signal == S.AVOID and risk_op.confidence >= 0.8:
+        if risk_op and risk_op.signal == S.AVOID and risk_op.confidence >= 0.85:
             assert result.urgency == Urgency.RED_FLAG
+
+
+class TestEdgeCases:
+    """Phase 1: division-by-zero, NaN, 경계값 엣지케이스."""
+
+    def test_zero_net_income_no_crash(self):
+        """net_income=0 일 때 FCF/순이익 계산이 안전한지 확인."""
+        agent = FundamentalAgent()
+        ctx = make_context(
+            fundamentals={
+                "freeCashflow": 1_000_000,
+                "netIncomeToCommon": 0,       # div-by-zero 위험
+                "grossMargins": 0.30,
+            }
+        )
+        opinion = agent.evaluate(ctx)
+        assert opinion.signal is not None
+
+    def test_zero_revenue_history_no_crash(self):
+        """매출 0인 연도가 포함된 재무 이력에서 CAGR/추이 계산 안전 확인."""
+        from src.agents.growth_agent import GrowthAgent
+        agent = GrowthAgent()
+        ctx = make_context(
+            fundamentals={"revenueGrowth": 0.10},
+            financial_history=[
+                {"year": "2021", "revenue": 0},         # zero revenue
+                {"year": "2022", "revenue": 1_000_000},
+                {"year": "2023", "revenue": 2_000_000},
+            ],
+        )
+        opinion = agent.evaluate(ctx)
+        assert opinion.signal is not None
+
+    def test_negative_revenue_operating_leverage(self):
+        """매출/비용이 극단적 값일 때 operating_leverage 안전 확인."""
+        from src.agents.moat_agent import MoatAgent
+        agent = MoatAgent()
+        ctx = make_context(
+            fundamentals={"grossMargins": 0.40, "returnOnEquity": 0.10},
+            financial_history=[
+                {"year": "2022", "revenue": 100, "operating_expense": 100},
+                {"year": "2023", "revenue": 100, "operating_expense": 100},  # cost_growth=0
+            ],
+        )
+        opinion = agent.evaluate(ctx)
+        assert opinion.signal is not None
+
+    def test_nan_fundamentals_no_crash(self):
+        """NaN 값이 들어온 펀더멘탈 데이터 처리."""
+        agent = FundamentalAgent()
+        ctx = make_context(
+            fundamentals={
+                "grossMargins": float("nan"),
+                "operatingMargins": float("nan"),
+                "revenueGrowth": 0.10,
+            }
+        )
+        opinion = agent.evaluate(ctx)
+        assert opinion.signal is not None
+
+    def test_empty_market_data_momentum(self):
+        """시장 데이터가 완전히 비어있을 때 모멘텀 에이전트."""
+        agent = MomentumAgent()
+        ctx = make_context(market_data=[])
+        opinion = agent.evaluate(ctx)
+        assert opinion.signal == Signal.WATCH
+        assert opinion.confidence <= 0.3
+
+    def test_all_none_fundamentals_risk_agent(self):
+        """모든 펀더멘탈이 None일 때 리스크 에이전트 안전 동작."""
+        agent = RiskAgent()
+        ctx = make_context(
+            fundamentals={k: None for k in [
+                "debtToEquity", "currentRatio", "freeCashflow",
+                "totalCash", "ebitda", "totalDebt", "ebit",
+                "interestExpense", "netIncomeToCommon", "totalRevenue",
+            ]}
+        )
+        opinion = agent.evaluate(ctx)
+        assert opinion.signal is not None
+
+    def test_moderator_with_minimal_data(self):
+        """최소 데이터로 moderator 전체 파이프라인 안전 실행."""
+        moderator = ExplorationModerator()
+        ctx = make_context(
+            fundamentals={"currentPrice": 10.0},
+            market_data=[],
+            financial_history=[],
+        )
+        result = moderator.run(ctx)
+        assert result.final_signal is not None
+        assert 0.0 <= result.final_confidence <= 1.0

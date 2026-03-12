@@ -83,7 +83,7 @@ class GrowthAgent(StockAgent):
         # ── 애널리스트 성장 전망 (15점) ─────────────────────────────────────
         target_price = f.get("targetMeanPrice")
         current_price = f.get("currentPrice") or f.get("regularMarketPrice")
-        analyst_count = f.get("numberOfAnalystOpinions") or 0
+        analyst_count = f.get("numberOfAnalystOpinions") or 0  # 0은 안전한 기본값 (비교 조건용)
 
         if target_price and current_price and analyst_count >= 3:
             upside = (target_price - current_price) / current_price
@@ -150,25 +150,30 @@ class GrowthAgent(StockAgent):
         pct = score / max_score
         metrics["growth_score"] = f"{score}/{max_score} ({pct*100:.0f}%)"
 
-        if pct >= 0.75:
+        t_sb = self._jitter(0.75)
+        t_buy = self._jitter(0.55)
+        t_watch = self._jitter(0.35)
+        t_pass = self._jitter(0.15)
+
+        if pct >= t_sb:
             signal = Signal.STRONG_BUY
-            confidence = min(0.82 + (pct - 0.75) * 0.5, 0.95)
+            confidence = min(0.82 + (pct - t_sb) * 0.5, 0.95)
             rationale = (
                 f"강한 성장 모멘텀 ({pct*100:.0f}%). "
                 f"{', '.join(strengths[:2]) if strengths else '복수 지표에서 고성장 확인'}."
             )
-        elif pct >= 0.55:
+        elif pct >= t_buy:
             signal = Signal.BUY
-            confidence = 0.60 + (pct - 0.55) * 1.1
+            confidence = 0.60 + (pct - t_buy) * 1.1
             rationale = (
                 f"견조한 성장세 ({pct*100:.0f}%). "
                 f"{strengths[0] if strengths else '성장성 양호'}."
             )
-        elif pct >= 0.35:
+        elif pct >= t_watch:
             signal = Signal.WATCH
             confidence = 0.50
             rationale = f"성장 둔화 또는 불확실 ({pct*100:.0f}%). 추이 모니터링 필요."
-        elif pct >= 0.15:
+        elif pct >= t_pass:
             signal = Signal.PASS
             confidence = 0.60
             rationale = (
@@ -182,6 +187,9 @@ class GrowthAgent(StockAgent):
                 f"성장 정체 또는 후퇴 ({pct*100:.0f}%). "
                 f"{'; '.join(risk_flags[:2]) if risk_flags else '성장 투자 부적합'}."
             )
+
+        confidence = self._apply_data_quality_penalty(confidence, context)
+        self._add_data_warnings(risk_flags, context)
 
         return AgentOpinion(
             agent_name=self.name,
@@ -202,9 +210,11 @@ class GrowthAgent(StockAgent):
             return None
         n = min(years, len(revenues) - 1)
         start, end = revenues[-(n + 1)], revenues[-1]
+        if start <= 0 or n <= 0:
+            return None
         try:
             return (end / start) ** (1 / n) - 1
-        except (ZeroDivisionError, ValueError):
+        except (ZeroDivisionError, ValueError, OverflowError):
             return None
 
     def _growth_trend(self, history: list[dict]) -> str | None:
@@ -212,7 +222,11 @@ class GrowthAgent(StockAgent):
         revenues = [h.get("revenue") for h in history if h.get("revenue") and h["revenue"] > 0]
         if len(revenues) < 3:
             return None
-        rates = [(revenues[i] / revenues[i - 1]) - 1 for i in range(1, len(revenues))]
+        rates = []
+        for i in range(1, len(revenues)):
+            if revenues[i - 1] > 0:
+                rates.append(revenues[i] / revenues[i - 1] - 1)
+            # revenues[i-1] == 0 인 경우 해당 구간 스킵
         if len(rates) < 2:
             return None
         recent, older = rates[-1], rates[-2]

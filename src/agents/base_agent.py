@@ -6,9 +6,11 @@ StrategyAgent → StockAgent로 도메인 변경.
 
 from __future__ import annotations
 
+import random
 from abc import ABC, abstractmethod
 
 from src.agents.models import AgentOpinion, Rebuttal, StockAnalysisContext
+from src.utils.config import ENABLE_JITTER, JITTER_RANGE, get_sector_thresholds
 
 
 class StockAgent(ABC):
@@ -20,6 +22,7 @@ class StockAgent(ABC):
 
     name: str = "base"
     description: str = ""
+    _needs_fundamentals: bool = True
 
     @abstractmethod
     def evaluate(self, context: StockAnalysisContext) -> AgentOpinion:
@@ -66,6 +69,22 @@ class StockAgent(ABC):
             "volume": latest.get("volume"),
         }
 
+    def _get_thresholds(self, context: StockAnalysisContext) -> dict:
+        """컨텍스트의 섹터 정보로 적절한 임계값을 반환한다."""
+        sector = context.fundamentals.get("sector")
+        return get_sector_thresholds(sector)
+
+    def _jitter(self, value: float) -> float:
+        """임계값에 ±JITTER_RANGE 범위의 노이즈를 부여한다.
+
+        토론 다양성 확보를 위해 매 실행마다 미세하게 다른 판단 경계를 생성.
+        ENABLE_JITTER=False이면 원래 값을 그대로 반환.
+        """
+        if not ENABLE_JITTER:
+            return value
+        noise = random.uniform(-JITTER_RANGE, JITTER_RANGE)
+        return value * (1.0 + noise)
+
     def _safe_ratio(self, numerator, denominator, default=None):
         """0 나누기 방어 유틸."""
         try:
@@ -74,3 +93,30 @@ class StockAgent(ABC):
         except (TypeError, ZeroDivisionError):
             pass
         return default
+
+    def _apply_data_quality_penalty(
+        self, confidence: float, context: StockAnalysisContext
+    ) -> float:
+        """데이터 품질에 따라 confidence를 감소시킨다.
+
+        모든 에이전트는 의견 반환 전에 반드시 이 메서드를 호출해야 함.
+        """
+        dq = context.data_quality
+        if not self._needs_fundamentals:
+            penalty = 1.0
+            if dq.data_age_days is not None and dq.data_age_days > 3:
+                penalty -= min(dq.data_age_days * 0.02, 0.15)
+            return round(max(0.5, confidence * penalty), 2)
+
+        penalty = dq.confidence_penalty
+        adjusted = confidence * penalty
+        return round(max(0.05, adjusted), 2)
+
+    def _add_data_warnings(
+        self, flags: list[str], context: StockAnalysisContext
+    ) -> None:
+        """데이터 품질 경고를 리스크 플래그에 추가."""
+        if not context.data_quality.is_sufficient:
+            flags.append("데이터 부족 — 신뢰도 낮음")
+        for w in context.data_quality.warnings[:2]:
+            flags.append(f"⚠ {w}")

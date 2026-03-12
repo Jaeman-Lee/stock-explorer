@@ -32,6 +32,33 @@ NEGATIVE_SIGNALS = {Signal.PASS, Signal.AVOID}
 
 
 @dataclass
+class DataQuality:
+    """데이터 완전성/신뢰성 추적."""
+
+    completeness: float = 0.0
+    available_fields: list[str] = field(default_factory=list)
+    missing_fields: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    suspect_fields: list[str] = field(default_factory=list)
+    data_age_days: int | None = None
+
+    @property
+    def is_sufficient(self) -> bool:
+        return len(self.available_fields) >= 3
+
+    @property
+    def confidence_penalty(self) -> float:
+        if not self.is_sufficient:
+            return 0.3
+        penalty = 1.0
+        penalty -= (1.0 - self.completeness) * 0.3
+        penalty -= min(len(self.suspect_fields) * 0.05, 0.2)
+        if self.data_age_days is not None and self.data_age_days > 3:
+            penalty -= min(self.data_age_days * 0.02, 0.15)
+        return max(0.3, penalty)
+
+
+@dataclass
 class StockAnalysisContext:
     """에이전트들에게 제공되는 종목 분석 컨텍스트.
 
@@ -59,6 +86,9 @@ class StockAnalysisContext:
 
     # 매크로 컨텍스트 (fin-advisor FRED 재사용)
     macro_snapshot: list[dict] = field(default_factory=list)    # FRED 지표 스냅샷
+
+    # 데이터 품질 (할루시네이션 방지)
+    data_quality: DataQuality = field(default_factory=DataQuality)
 
 
 @dataclass

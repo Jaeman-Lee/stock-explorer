@@ -7,7 +7,16 @@ fin-advisor의 moderator.py 패턴을 그대로 계승.
 from __future__ import annotations
 
 import datetime
+import random
 from collections import Counter
+
+from src.utils.config import (
+    ENABLE_JITTER,
+    JITTER_RANGE,
+    RISK_HARD_VETO_CONFIDENCE,
+    RISK_SOFT_VETO_CONFIDENCE,
+    RISK_SOFT_VETO_PENALTY,
+)
 
 from src.agents.base_agent import StockAgent
 from src.agents.fundamental_agent import FundamentalAgent
@@ -158,23 +167,32 @@ class ExplorationModerator:
     ) -> Signal:
         """confidence 가중 투표로 최종 신호를 결정한다.
 
-        fin-advisor moderator._determine_signal 패턴 계승.
+        effective_weight = sum(confidences) * (1 + 0.1 * count)
+        → 합의 폭(breadth)을 보상하여 1명 고확신보다 3명 중확신을 우대.
         """
-        weights: dict[Signal, float] = Counter()
+        # 신호별 confidence 합산 + 투표수
+        signal_confs: dict[Signal, list[float]] = {}
         total_weight = 0.0
 
         for opinion in opinions:
-            weights[opinion.signal] += opinion.confidence
+            signal_confs.setdefault(opinion.signal, []).append(opinion.confidence)
             total_weight += opinion.confidence
 
         if total_weight == 0:
             return Signal.WATCH
 
-        best_signal = max(weights, key=lambda s: weights[s])
-        best_weight = weights[best_signal]
+        # effective weight: 합의 폭 보상
+        effective: dict[Signal, float] = {}
+        for sig, confs in signal_confs.items():
+            raw = sum(confs)
+            breadth_bonus = 1 + 0.1 * len(confs)
+            effective[sig] = raw * breadth_bonus
+
+        best_signal = max(effective, key=lambda s: effective[s])
 
         # 확신이 약하면 WATCH로 수렴
-        if best_weight / total_weight < 0.25:
+        raw_best = sum(signal_confs[best_signal])
+        if raw_best / total_weight < 0.25:
             return Signal.WATCH
 
         return best_signal
@@ -182,7 +200,7 @@ class ExplorationModerator:
     def _compute_confidence(
         self, opinions: list[AgentOpinion], final_signal: Signal
     ) -> float:
-        """최종 신호에 동의하는 에이전트들의 평균 confidence."""
+        """최종 신호에 동의하는 에이전트들의 평균 confidence + 미세 노이즈."""
         agreeing = []
         for o in opinions:
             if (
@@ -194,7 +212,25 @@ class ExplorationModerator:
 
         if not agreeing:
             return 0.3
-        return sum(agreeing) / len(agreeing)
+        avg = sum(agreeing) / len(agreeing)
+
+        # 소프트 거부: 리스크 에이전트 AVOID + conf >= 0.70 이면 패널티
+        risk_opinion = next(
+            (o for o in opinions if o.agent_name == "risk-analyst"), None
+        )
+        if (
+            risk_opinion
+            and risk_opinion.signal == Signal.AVOID
+            and risk_opinion.confidence >= RISK_SOFT_VETO_CONFIDENCE
+            and final_signal in POSITIVE_SIGNALS
+        ):
+            avg -= RISK_SOFT_VETO_PENALTY
+
+        # 최종 confidence에도 미세 노이즈 부여 (±2%)
+        if ENABLE_JITTER:
+            noise = random.uniform(-JITTER_RANGE * 0.4, JITTER_RANGE * 0.4)
+            avg += noise
+        return max(0.05, min(0.99, avg))
 
     def _classify_urgency(
         self,
@@ -210,14 +246,14 @@ class ExplorationModerator:
         - SPLIT: 의견 분열
         - RED_FLAG: 리스크 에이전트 거부권
         """
-        # RED_FLAG: 리스크 에이전트가 AVOID + confidence >= 0.8
+        # RED_FLAG: 리스크 에이전트 하드 거부 (AVOID + confidence >= 0.85)
         risk_opinion = next(
             (o for o in opinions if o.agent_name == "risk-analyst"), None
         )
         if (
             risk_opinion
             and risk_opinion.signal == Signal.AVOID
-            and risk_opinion.confidence >= 0.8
+            and risk_opinion.confidence >= RISK_HARD_VETO_CONFIDENCE
             and final_signal in POSITIVE_SIGNALS
         ):
             return Urgency.RED_FLAG

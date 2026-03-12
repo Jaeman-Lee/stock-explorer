@@ -32,8 +32,14 @@ class MoatAgent(StockAgent):
         if gross_margin is not None:
             max_score += 15
             metrics["gross_margin_pct"] = round(gross_margin * 100, 1)
-            peer_gm = self._avg(peers, "gross_margin") or 0.35
-            gm_premium = gross_margin - peer_gm
+            peer_gm = self._avg(peers, "gross_margin")
+            if peer_gm is not None:
+                gm_premium = gross_margin - peer_gm
+            else:
+                # 동종 비교 불가 — 섹터별 기준 사용
+                th = self._get_thresholds(context)
+                gm_premium = gross_margin - th["peer_gross_margin"]
+                risk_flags.append("동종 매출총이익률 데이터 없음 — 섹터 기준 평가")
 
             if gm_premium >= 0.15:
                 score += 15
@@ -74,7 +80,7 @@ class MoatAgent(StockAgent):
         if roe is not None:
             max_score += 15
             metrics["roe_pct"] = round(roe * 100, 1)
-            peer_roe = self._avg(peers, "roe") or 0.12
+            peer_roe = self._avg(peers, "roe") or 0.12  # ROE는 일반적 벤치마크 (S&P500 ~12%)
             if roe >= 0.25:
                 score += 15
                 strengths.append(f"ROE {roe*100:.0f}% — 자본 효율성 탁월 (해자 시사)")
@@ -165,25 +171,30 @@ class MoatAgent(StockAgent):
         pct = score / max_score
         metrics["moat_score"] = f"{score}/{max_score} ({pct*100:.0f}%)"
 
-        if pct >= 0.75:
+        t_sb = self._jitter(0.75)
+        t_buy = self._jitter(0.55)
+        t_watch = self._jitter(0.35)
+        t_pass = self._jitter(0.15)
+
+        if pct >= t_sb:
             signal = Signal.STRONG_BUY
-            confidence = min(0.82 + (pct - 0.75) * 0.52, 0.95)
+            confidence = min(0.82 + (pct - t_sb) * 0.52, 0.95)
             rationale = (
                 f"강한 경쟁 해자 확인 ({pct*100:.0f}%). "
                 f"{', '.join(strengths[:2]) if strengths else '복수 지표에서 해자 우위'}."
             )
-        elif pct >= 0.55:
+        elif pct >= t_buy:
             signal = Signal.BUY
-            confidence = 0.60 + (pct - 0.55) * 1.1
+            confidence = 0.60 + (pct - t_buy) * 1.1
             rationale = (
                 f"어느 정도의 경쟁우위 ({pct*100:.0f}%). "
                 f"{strengths[0] if strengths else '일부 해자 요소 확인'}."
             )
-        elif pct >= 0.35:
+        elif pct >= t_watch:
             signal = Signal.WATCH
             confidence = 0.50
             rationale = f"해자 약하거나 불명확 ({pct*100:.0f}%). 추가 조사 필요."
-        elif pct >= 0.15:
+        elif pct >= t_pass:
             signal = Signal.PASS
             confidence = 0.60
             rationale = (
@@ -197,6 +208,9 @@ class MoatAgent(StockAgent):
                 f"경쟁우위 없음 ({pct*100:.0f}%). "
                 f"{'; '.join(risk_flags[:2]) if risk_flags else '해자 없는 경쟁적 업종'}."
             )
+
+        confidence = self._apply_data_quality_penalty(confidence, context)
+        self._add_data_warnings(risk_flags, context)
 
         return AgentOpinion(
             agent_name=self.name,
@@ -233,14 +247,16 @@ class MoatAgent(StockAgent):
         if len(history) < 2:
             return None
         prev, curr = history[-2], history[-1]
-        rev_prev = prev.get("revenue", 0)
-        rev_curr = curr.get("revenue", 0)
-        cost_prev = prev.get("operating_expense", 0)
-        cost_curr = curr.get("operating_expense", 0)
+        rev_prev = prev.get("revenue")
+        rev_curr = curr.get("revenue")
+        cost_prev = prev.get("operating_expense")
+        cost_curr = curr.get("operating_expense")
         if not all([rev_prev, rev_curr, cost_prev, cost_curr]):
+            return None
+        if abs(rev_prev) < 1e-6 or abs(cost_prev) < 1e-6:
             return None
         rev_growth = (rev_curr - rev_prev) / abs(rev_prev)
         cost_growth = (cost_curr - cost_prev) / abs(cost_prev)
-        if cost_growth == 0:
+        if abs(cost_growth) < 1e-9:
             return None
         return rev_growth / cost_growth

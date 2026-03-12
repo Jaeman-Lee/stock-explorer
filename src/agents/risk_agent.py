@@ -49,20 +49,24 @@ class RiskAgent(StockAgent):
         #   >= 0 이면 Net Debt / EBITDA 로 상환 능력 측정
 
         debt_to_equity = f.get("debtToEquity")
-        total_debt = f.get("totalDebt") or 0
-        total_cash = f.get("totalCash") or 0
+        total_debt = f.get("totalDebt")
+        total_cash = f.get("totalCash")
         ebitda = f.get("ebitda")
 
         max_penalty += 30
 
-        net_debt = total_debt - total_cash
-        net_cash_position = net_debt < 0
+        # net_debt 계산 — None일 때 0으로 대체하되, 양쪽 다 None이면 스킵
+        _debt = total_debt if total_debt is not None else 0
+        _cash = total_cash if total_cash is not None else 0
+        can_compute_net_debt = total_debt is not None or total_cash is not None
+        net_debt = _debt - _cash
+        net_cash_position = can_compute_net_debt and net_debt < 0
 
         if net_cash_position:
             # 현금이 부채를 초과 → 실질 부채 리스크 없음
             metrics["net_debt_b"] = round(net_debt / 1e9, 2)
             strengths.append(
-                f"순현금 포지션 (현금 {total_cash/1e9:.1f}B > 부채 {total_debt/1e9:.1f}B)"
+                f"순현금 포지션 (현금 {_cash/1e9:.1f}B > 부채 {_debt/1e9:.1f}B)"
             )
             if debt_to_equity and debt_to_equity > 10:
                 metrics["de_skipped"] = (
@@ -214,26 +218,31 @@ class RiskAgent(StockAgent):
         risk_pct = penalty / max_penalty
         metrics["risk_score"] = f"{penalty}/{max_penalty} ({risk_pct*100:.0f}%)"
 
-        # 리스크 낮을수록 매수 우호적
-        if risk_pct >= 0.75:
+        # 리스크 낮을수록 매수 우호적 — 지터 적용
+        t_avoid = self._jitter(0.75)
+        t_pass = self._jitter(0.50)
+        t_watch = self._jitter(0.25)
+        t_buy = self._jitter(0.10)
+
+        if risk_pct >= t_avoid:
             signal = Signal.AVOID
-            confidence = min(0.80 + (risk_pct - 0.75) * 0.8, 0.95)
+            confidence = min(0.80 + (risk_pct - t_avoid) * 0.8, 0.95)
             rationale = (
                 f"심각한 리스크 발견 ({risk_pct*100:.0f}%). "
                 f"{'; '.join(risk_flags[:2]) if risk_flags else '투자 부적합 리스크'}."
             )
-        elif risk_pct >= 0.50:
+        elif risk_pct >= t_pass:
             signal = Signal.PASS
             confidence = 0.65
             rationale = (
                 f"주요 리스크 존재 ({risk_pct*100:.0f}%). "
                 f"{risk_flags[0] if risk_flags else '리스크 주의 필요'}."
             )
-        elif risk_pct >= 0.25:
+        elif risk_pct >= t_watch:
             signal = Signal.WATCH
             confidence = 0.55
             rationale = f"보통 수준의 리스크 ({risk_pct*100:.0f}%). 모니터링 권장."
-        elif risk_pct >= 0.10:
+        elif risk_pct >= t_buy:
             signal = Signal.BUY
             confidence = 0.70
             rationale = (
@@ -247,6 +256,9 @@ class RiskAgent(StockAgent):
                 f"매우 낮은 리스크 ({risk_pct*100:.0f}%). "
                 f"{', '.join(strengths[:2]) if strengths else '안정적인 재무 구조'}."
             )
+
+        confidence = self._apply_data_quality_penalty(confidence, context)
+        self._add_data_warnings(risk_flags, context)
 
         return AgentOpinion(
             agent_name=self.name,

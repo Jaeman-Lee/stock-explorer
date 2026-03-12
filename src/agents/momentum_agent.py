@@ -18,6 +18,7 @@ class MomentumAgent(StockAgent):
 
     name = "momentum-analyst"
     description = "RSI·MACD·SMA·볼린저밴드 기반 기술적 진입 타이밍 평가"
+    _needs_fundamentals = False
 
     def evaluate(self, context: StockAnalysisContext) -> AgentOpinion:
         ind = self._latest_indicators(context)
@@ -80,8 +81,8 @@ class MomentumAgent(StockAgent):
                 # 히스토그램 확장 여부
                 prev_data = context.market_data[:-1] if len(context.market_data) > 1 else []
                 if prev_data:
-                    prev_hist = prev_data[-1].get("macd_hist", 0) or 0
-                    if macd_hist > prev_hist:
+                    prev_hist = prev_data[-1].get("macd_hist")
+                    if prev_hist is not None and macd_hist > prev_hist:
                         score += 5
                         strengths.append("MACD 히스토그램 확장 — 모멘텀 강화")
                     else:
@@ -130,24 +131,25 @@ class MomentumAgent(StockAgent):
         bb_mid = ind.get("bb_mid")
 
         if bb_upper and bb_lower and bb_mid and close:
-            max_score += 25
             bb_range = bb_upper - bb_lower
-            bb_pos = (close - bb_lower) / bb_range if bb_range > 0 else 0.5
-            metrics["bollinger_position_pct"] = round(bb_pos * 100, 1)
+            if bb_range > 0:
+                max_score += 25
+                bb_pos = (close - bb_lower) / bb_range
+                metrics["bollinger_position_pct"] = round(bb_pos * 100, 1)
 
-            if bb_pos <= 0.15:
-                score += 25
-                strengths.append(f"볼린저 하단 근접 ({bb_pos*100:.0f}%) — 과매도 반등 구간")
-            elif bb_pos <= 0.35:
-                score += 18
-                strengths.append(f"볼린저 하단부 ({bb_pos*100:.0f}%) — 저점 매수 기회")
-            elif bb_pos <= 0.65:
-                score += 14  # 중앙부 중립
-            elif bb_pos <= 0.85:
-                score += 7
-            else:
-                risk_flags.append(f"볼린저 상단 근접 ({bb_pos*100:.0f}%) — 과매수 주의")
-                score += 3
+                if bb_pos <= 0.15:
+                    score += 25
+                    strengths.append(f"볼린저 하단 근접 ({bb_pos*100:.0f}%) — 과매도 반등 구간")
+                elif bb_pos <= 0.35:
+                    score += 18
+                    strengths.append(f"볼린저 하단부 ({bb_pos*100:.0f}%) — 저점 매수 기회")
+                elif bb_pos <= 0.65:
+                    score += 14  # 중앙부 중립
+                elif bb_pos <= 0.85:
+                    score += 7
+                else:
+                    risk_flags.append(f"볼린저 상단 근접 ({bb_pos*100:.0f}%) — 과매수 주의")
+                    score += 3
 
         # ── 종합 판정 ───────────────────────────────────────────────────────
         if max_score == 0:
@@ -163,25 +165,30 @@ class MomentumAgent(StockAgent):
         pct = score / max_score
         metrics["momentum_score"] = f"{score}/{max_score} ({pct*100:.0f}%)"
 
-        if pct >= 0.75:
+        t_sb = self._jitter(0.75)
+        t_buy = self._jitter(0.55)
+        t_watch = self._jitter(0.40)
+        t_pass = self._jitter(0.25)
+
+        if pct >= t_sb:
             signal = Signal.STRONG_BUY
-            confidence = min(0.80 + (pct - 0.75) * 0.6, 0.92)
+            confidence = min(0.80 + (pct - t_sb) * 0.6, 0.92)
             rationale = (
                 f"강한 기술적 매수 신호 ({pct*100:.0f}%). "
                 f"{', '.join(strengths[:2]) if strengths else '복수 지표 매수 신호'}."
             )
-        elif pct >= 0.55:
+        elif pct >= t_buy:
             signal = Signal.BUY
-            confidence = 0.60 + (pct - 0.55) * 1.0
+            confidence = 0.60 + (pct - t_buy) * 1.0
             rationale = (
                 f"기술적 매수 우세 ({pct*100:.0f}%). "
                 f"{strengths[0] if strengths else '기술적 지표 양호'}."
             )
-        elif pct >= 0.40:
+        elif pct >= t_watch:
             signal = Signal.WATCH
             confidence = 0.50
             rationale = f"기술적 중립 ({pct*100:.0f}%). 추세 방향 확인 후 진입."
-        elif pct >= 0.25:
+        elif pct >= t_pass:
             signal = Signal.PASS
             confidence = 0.55
             rationale = (
@@ -195,6 +202,9 @@ class MomentumAgent(StockAgent):
                 f"기술적 강한 하락 신호 ({pct*100:.0f}%). "
                 f"{'; '.join(risk_flags[:2]) if risk_flags else '기술적 진입 회피'}."
             )
+
+        confidence = self._apply_data_quality_penalty(confidence, context)
+        self._add_data_warnings(risk_flags, context)
 
         return AgentOpinion(
             agent_name=self.name,

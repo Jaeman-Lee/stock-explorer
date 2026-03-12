@@ -9,6 +9,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 JOURNALS_DIR = DATA_DIR / "journals"
+DB_PATH = DATA_DIR / "explorations.db"
 
 # ── 탐험 대상 유니버스 ─────────────────────────────────────────────────────────
 # 미국 대형주 (S&P 500 대표 섹터별)
@@ -147,11 +148,92 @@ STRONG_BUY_CONFIDENCE = 0.75          # 강력 매수 신뢰도 임계값
 # ── 리스크 임계값 (fin-advisor와 유사) ─────────────────────────────────────
 MAX_DEBT_TO_EQUITY = 3.0
 MIN_CURRENT_RATIO = 0.8
-RISK_VETO_CONFIDENCE = 0.80           # 이 이상이면 리스크 에이전트 거부권 발동
+RISK_VETO_CONFIDENCE = 0.80           # (deprecated) 하위호환용
+RISK_SOFT_VETO_CONFIDENCE = 0.70      # 소프트 거부 (confidence 패널티만)
+RISK_HARD_VETO_CONFIDENCE = 0.85      # 하드 거부 (RED_FLAG 격상)
+RISK_SOFT_VETO_PENALTY = 0.15         # 소프트 거부 시 최종 confidence 감산
 
 # ── 데이터 수집 ─────────────────────────────────────────────────────────────
 DEFAULT_LOOKBACK_DAYS = 90
 MARKET_DATA_INTERVAL = "1d"
+PEER_FETCH_TIMEOUT = 10  # 개별 피어 티커 요청 제한 시간 (초)
+
+# ── 섹터별 대표 피어 티커 ──────────────────────────────────────────────────────
+SECTOR_PEER_MAP: dict[str, list[str]] = {
+    "Technology": ["AAPL", "MSFT", "GOOGL", "META", "NVDA"],
+    "Financial Services": ["JPM", "BAC", "GS", "MS", "BRK-B"],
+    "Healthcare": ["UNH", "JNJ", "LLY", "PFE", "ABBV"],
+    "Consumer Cyclical": ["AMZN", "TSLA", "HD", "NKE", "MCD"],
+    "Consumer Defensive": ["PG", "KO", "PEP", "COST", "WMT"],
+    "Energy": ["XOM", "CVX", "COP", "SLB", "EOG"],
+    "Communication Services": ["GOOGL", "META", "DIS", "NFLX", "CMCSA"],
+    "Industrials": ["CAT", "HON", "UNP", "GE", "RTX"],
+}
+
+# ── 섹터별 임계값 ──────────────────────────────────────────────────────────────
+SECTOR_THRESHOLDS: dict[str, dict] = {
+    "Technology": {
+        "pe_low": 20, "pe_high": 35, "pe_extreme": 60,
+        "gross_margin_good": 0.55, "op_margin_good": 0.20,
+        "peer_gross_margin": 0.45,
+    },
+    "Financial Services": {
+        "pe_low": 10, "pe_high": 18, "pe_extreme": 30,
+        "gross_margin_good": 0.40, "op_margin_good": 0.25,
+        "peer_gross_margin": 0.35,
+    },
+    "Healthcare": {
+        "pe_low": 18, "pe_high": 30, "pe_extreme": 50,
+        "gross_margin_good": 0.60, "op_margin_good": 0.15,
+        "peer_gross_margin": 0.50,
+    },
+    "Consumer Cyclical": {
+        "pe_low": 12, "pe_high": 25, "pe_extreme": 40,
+        "gross_margin_good": 0.35, "op_margin_good": 0.10,
+        "peer_gross_margin": 0.30,
+    },
+    "Consumer Defensive": {
+        "pe_low": 15, "pe_high": 25, "pe_extreme": 35,
+        "gross_margin_good": 0.35, "op_margin_good": 0.12,
+        "peer_gross_margin": 0.30,
+    },
+    "Energy": {
+        "pe_low": 8, "pe_high": 15, "pe_extreme": 25,
+        "gross_margin_good": 0.30, "op_margin_good": 0.12,
+        "peer_gross_margin": 0.25,
+    },
+    "Communication Services": {
+        "pe_low": 15, "pe_high": 28, "pe_extreme": 45,
+        "gross_margin_good": 0.50, "op_margin_good": 0.18,
+        "peer_gross_margin": 0.40,
+    },
+    "Industrials": {
+        "pe_low": 12, "pe_high": 22, "pe_extreme": 35,
+        "gross_margin_good": 0.30, "op_margin_good": 0.10,
+        "peer_gross_margin": 0.28,
+    },
+    "_default": {
+        "pe_low": 15, "pe_high": 25, "pe_extreme": 40,
+        "gross_margin_good": 0.50, "op_margin_good": 0.20,
+        "peer_gross_margin": 0.35,
+    },
+}
+
+
+def get_sector_thresholds(sector: str | None) -> dict:
+    """섹터명으로 임계값 딕셔너리를 반환한다."""
+    if sector and sector in SECTOR_THRESHOLDS:
+        return SECTOR_THRESHOLDS[sector]
+    return SECTOR_THRESHOLDS["_default"]
+
+
+# ── 지터 (토론 다양성) ─────────────────────────────────────────────────────────
+ENABLE_JITTER = True                   # False이면 모든 에이전트가 결정론적 (기존 동작)
+JITTER_RANGE = 0.05                    # ±5% 범위로 임계값에 노이즈 부여
+
+# ── 로깅 설정 ────────────────────────────────────────────────────────────────
+LOG_LEVEL = "INFO"
+LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 
 # ── 출력 설정 ────────────────────────────────────────────────────────────────
 DEFAULT_OUTPUT_DIR = JOURNALS_DIR

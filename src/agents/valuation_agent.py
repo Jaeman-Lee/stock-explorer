@@ -30,14 +30,29 @@ class ValuationAgent(StockAgent):
         # ── P/E 평가 (25점) ─────────────────────────────────────────────────
         pe = f.get("trailingPE") or f.get("forwardPE")
         pe_label = "trailing P/E" if f.get("trailingPE") else "forward P/E"
-        sector_avg_pe = self._avg(peers, "pe") or 25.0
+        sector_avg_pe = self._avg(peers, "pe")
         hist_avg_pe = hist.get("avg_pe") or sector_avg_pe
 
         if pe is not None and pe > 0:
             max_score += 25
             metrics[pe_label] = round(pe, 1)
-            metrics["sector_avg_pe"] = round(sector_avg_pe, 1)
-            discount_vs_sector = (sector_avg_pe - pe) / sector_avg_pe
+            if sector_avg_pe is not None:
+                metrics["sector_avg_pe"] = round(sector_avg_pe, 1)
+            # 섹터 비교 데이터 없으면 섹터별 절대값 기준으로 평가
+            if sector_avg_pe is not None and sector_avg_pe > 0:
+                discount_vs_sector = (sector_avg_pe - pe) / sector_avg_pe
+            else:
+                # 섹터 비교 불가 → 섹터별 P/E 밴드로 평가
+                th = self._get_thresholds(context)
+                risk_flags.append("동종 업체 데이터 없음 — 절대값 기준 평가")
+                if pe < th["pe_low"]:
+                    discount_vs_sector = 0.25  # 저평가로 간주
+                elif pe < th["pe_high"]:
+                    discount_vs_sector = 0.05  # 적정
+                elif pe < th["pe_extreme"]:
+                    discount_vs_sector = -0.15  # 다소 높음
+                else:
+                    discount_vs_sector = -0.35  # 고평가
 
             if discount_vs_sector >= 0.25:
                 score += 25
@@ -116,8 +131,19 @@ class ValuationAgent(StockAgent):
         if ev_ebitda is not None and ev_ebitda > 0:
             max_score += 20
             metrics["ev_to_ebitda"] = round(ev_ebitda, 1)
-            sector_avg_ebitda = self._avg(peers, "ev_ebitda") or 15.0
-            discount = (sector_avg_ebitda - ev_ebitda) / sector_avg_ebitda
+            sector_avg_ebitda = self._avg(peers, "ev_ebitda")
+            if sector_avg_ebitda is not None and sector_avg_ebitda > 0:
+                discount = (sector_avg_ebitda - ev_ebitda) / sector_avg_ebitda
+            else:
+                # 섹터 비교 불가 → 절대값 기준
+                if ev_ebitda < 10:
+                    discount = 0.20
+                elif ev_ebitda < 15:
+                    discount = 0.05
+                elif ev_ebitda < 25:
+                    discount = -0.10
+                else:
+                    discount = -0.30
 
             if discount >= 0.20:
                 score += 20
@@ -145,28 +171,33 @@ class ValuationAgent(StockAgent):
         pct = score / max_score
         metrics["valuation_score"] = f"{score}/{max_score} ({pct*100:.0f}%)"
 
-        if pct >= 0.75:
+        t_sb = self._jitter(0.75)
+        t_buy = self._jitter(0.55)
+        t_watch = self._jitter(0.35)
+        t_pass = self._jitter(0.15)
+
+        if pct >= t_sb:
             signal = Signal.STRONG_BUY
-            confidence = min(0.80 + (pct - 0.75) * 0.6, 0.95)
+            confidence = min(0.80 + (pct - t_sb) * 0.6, 0.95)
             rationale = (
                 f"매력적인 밸류에이션 ({pct*100:.0f}%). "
                 f"{', '.join(strengths[:2]) if strengths else '복수 지표에서 저평가 확인'}."
             )
-        elif pct >= 0.55:
+        elif pct >= t_buy:
             signal = Signal.BUY
-            confidence = 0.60 + (pct - 0.55) * 1.0
+            confidence = 0.60 + (pct - t_buy) * 1.0
             rationale = (
                 f"합리적인 가격 수준 ({pct*100:.0f}%). "
                 f"{strengths[0] if strengths else '밸류에이션 적정'}."
             )
-        elif pct >= 0.35:
+        elif pct >= t_watch:
             signal = Signal.WATCH
             confidence = 0.45
             rationale = (
                 f"밸류에이션 다소 부담 ({pct*100:.0f}%). "
                 f"조정 시 재평가 권장."
             )
-        elif pct >= 0.15:
+        elif pct >= t_pass:
             signal = Signal.PASS
             confidence = 0.65
             rationale = (
@@ -180,6 +211,9 @@ class ValuationAgent(StockAgent):
                 f"심각한 고평가 ({pct*100:.0f}%). "
                 f"{'; '.join(risk_flags[:2]) if risk_flags else '밸류에이션 투자 부적합'}."
             )
+
+        confidence = self._apply_data_quality_penalty(confidence, context)
+        self._add_data_warnings(risk_flags, context)
 
         return AgentOpinion(
             agent_name=self.name,

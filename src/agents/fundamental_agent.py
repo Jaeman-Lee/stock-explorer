@@ -27,6 +27,7 @@ class FundamentalAgent(StockAgent):
         risk_flags: list[str] = []
 
         # ── 수익성 (30점) ───────────────────────────────────────────────────
+        th = self._get_thresholds(context)
         gross_margin = f.get("grossMargins")
         op_margin = f.get("operatingMargins")
         net_margin = f.get("profitMargins")
@@ -34,12 +35,13 @@ class FundamentalAgent(StockAgent):
         if gross_margin is not None:
             max_score += 10
             metrics["gross_margin_pct"] = round(gross_margin * 100, 1)
-            if gross_margin >= 0.50:
+            gm_good = th["gross_margin_good"]
+            if gross_margin >= gm_good:
                 score += 10
                 strengths.append(f"높은 매출총이익률 {gross_margin*100:.0f}% (경쟁우위 시사)")
-            elif gross_margin >= 0.35:
+            elif gross_margin >= gm_good * 0.70:
                 score += 6
-            elif gross_margin >= 0.20:
+            elif gross_margin >= gm_good * 0.40:
                 score += 3
             else:
                 risk_flags.append(f"낮은 매출총이익률 {gross_margin*100:.0f}%")
@@ -47,10 +49,11 @@ class FundamentalAgent(StockAgent):
         if op_margin is not None:
             max_score += 10
             metrics["operating_margin_pct"] = round(op_margin * 100, 1)
-            if op_margin >= 0.20:
+            om_good = th["op_margin_good"]
+            if op_margin >= om_good:
                 score += 10
                 strengths.append(f"우수한 영업이익률 {op_margin*100:.0f}%")
-            elif op_margin >= 0.10:
+            elif op_margin >= om_good * 0.50:
                 score += 6
             elif op_margin >= 0.0:
                 score += 3
@@ -104,8 +107,8 @@ class FundamentalAgent(StockAgent):
         # ── 재무 건전성 (20점) ──────────────────────────────────────────────
         # D/E는 자사주매입으로 왜곡될 수 있어 Net Debt/EBITDA 우선 사용.
         # current ratio < 1.0은 FCF가 충분하면 실질 리스크가 아닐 수 있음.
-        total_debt = f.get("totalDebt") or 0
-        total_cash = f.get("totalCash") or 0
+        total_debt = f.get("totalDebt")
+        total_cash = f.get("totalCash")
         ebitda = f.get("ebitda")
         debt_to_equity = f.get("debtToEquity")
         current_ratio = f.get("currentRatio")
@@ -113,14 +116,18 @@ class FundamentalAgent(StockAgent):
         revenue_health = f.get("totalRevenue")
 
         # 실질적인 부채 데이터가 있을 때만 해당 섹션 평가
-        has_debt_data = total_debt > 0 or debt_to_equity is not None or ebitda is not None
+        has_debt_data = (total_debt is not None) or debt_to_equity is not None or ebitda is not None
         if has_debt_data:
             max_score += 10
-        net_debt = total_debt - total_cash
-        if has_debt_data and net_debt < 0:
+        # net_debt 계산 — 부채/현금 데이터 모두 있을 때만
+        _debt = total_debt if total_debt is not None else 0
+        _cash = total_cash if total_cash is not None else 0
+        net_debt = _debt - _cash
+        can_compute_net_debt = total_debt is not None or total_cash is not None
+        if has_debt_data and can_compute_net_debt and net_debt < 0:
             # 순현금 포지션
             score += 10
-            strengths.append(f"순현금 포지션 ({total_cash/1e9:.1f}B > 부채 {total_debt/1e9:.1f}B)")
+            strengths.append(f"순현금 포지션 ({_cash/1e9:.1f}B > 부채 {_debt/1e9:.1f}B)")
             metrics["net_debt_b"] = round(net_debt / 1e9, 2)
         elif ebitda and ebitda > 0:
             nd_ebitda = net_debt / ebitda
@@ -188,7 +195,7 @@ class FundamentalAgent(StockAgent):
             else:
                 risk_flags.append(f"마이너스 ROE {roe*100:.1f}%")
 
-        if fcf is not None and net_income and net_income != 0:
+        if fcf is not None and net_income and abs(net_income) > 1e-6:
             max_score += 10
             fcf_quality = fcf / abs(net_income)
             metrics["fcf_to_net_income"] = round(fcf_quality, 2)
@@ -216,25 +223,31 @@ class FundamentalAgent(StockAgent):
         pct = score / max_score
         metrics["fundamental_score"] = f"{score}/{max_score} ({pct*100:.0f}%)"
 
-        if pct >= 0.80:
-            signal, confidence = Signal.STRONG_BUY, min(0.85 + (pct - 0.80) * 0.5, 0.95)
+        # 신호 경계에 지터 적용 → 매 실행마다 미세 차이
+        t_sb = self._jitter(0.80)
+        t_buy = self._jitter(0.65)
+        t_watch = self._jitter(0.45)
+        t_pass = self._jitter(0.25)
+
+        if pct >= t_sb:
+            signal, confidence = Signal.STRONG_BUY, min(0.85 + (pct - t_sb) * 0.5, 0.95)
             rationale = (
                 f"펀더멘탈 최상위권 ({pct*100:.0f}%). "
                 f"{', '.join(strengths[:2]) if strengths else '전반적으로 우수한 재무 구조'}."
             )
-        elif pct >= 0.65:
-            signal, confidence = Signal.BUY, 0.65 + (pct - 0.65) * 1.33
+        elif pct >= t_buy:
+            signal, confidence = Signal.BUY, 0.65 + (pct - t_buy) * 1.33
             rationale = (
                 f"양호한 펀더멘탈 ({pct*100:.0f}%). "
                 f"{strengths[0] if strengths else '수익성·성장성 양호'}."
             )
-        elif pct >= 0.45:
+        elif pct >= t_watch:
             signal, confidence = Signal.WATCH, 0.50
             rationale = (
                 f"펀더멘탈 보통 수준 ({pct*100:.0f}%). "
                 f"개선 추이 확인 필요."
             )
-        elif pct >= 0.25:
+        elif pct >= t_pass:
             signal, confidence = Signal.PASS, 0.60
             rationale = (
                 f"펀더멘탈 미흡 ({pct*100:.0f}%). "
@@ -246,6 +259,9 @@ class FundamentalAgent(StockAgent):
                 f"심각한 재무 약점 ({pct*100:.0f}%). "
                 f"{'; '.join(risk_flags[:2]) if risk_flags else '투자 부적합'}."
             )
+
+        confidence = self._apply_data_quality_penalty(confidence, context)
+        self._add_data_warnings(risk_flags, context)
 
         return AgentOpinion(
             agent_name=self.name,
