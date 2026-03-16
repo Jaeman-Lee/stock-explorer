@@ -16,6 +16,8 @@ from src.utils.config import (
     RISK_HARD_VETO_CONFIDENCE,
     RISK_SOFT_VETO_CONFIDENCE,
     RISK_SOFT_VETO_PENALTY,
+    VALUATION_DRAG_CONFIDENCE,
+    VALUATION_DRAG_PENALTY,
 )
 
 from src.agents.base_agent import StockAgent
@@ -71,6 +73,31 @@ class ExplorationModerator:
         # Phase 4: 최종 신호 + 긴급도
         final_signal = self._determine_signal(opinions, vote_tally)
         final_confidence = self._compute_confidence(opinions, final_signal)
+
+        # Valuation drag: BUY/STRONG_BUY인데 밸류에이션 에이전트가 부정적이면 패널티
+        val_opinion = next(
+            (o for o in opinions if o.agent_name == "valuation-analyst"), None
+        )
+        if (
+            val_opinion
+            and final_signal in POSITIVE_SIGNALS
+            and val_opinion.signal in NEGATIVE_SIGNALS
+            and val_opinion.confidence >= VALUATION_DRAG_CONFIDENCE
+        ):
+            final_confidence -= VALUATION_DRAG_PENALTY
+
+        # Macro regime 반영
+        macro = context.macro_snapshot
+        regime = None
+        if isinstance(macro, dict):
+            regime = macro.get("regime")
+        if regime and final_signal in POSITIVE_SIGNALS:
+            if regime == "bear":
+                final_confidence -= 0.10
+            elif regime == "bull":
+                final_confidence += 0.05
+        final_confidence = max(0.05, min(0.99, final_confidence))
+
         urgency = self._classify_urgency(opinions, vote_tally, final_signal)
 
         # Phase 5: 결과 조립

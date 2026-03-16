@@ -148,6 +148,19 @@ class GrowthAgent(StockAgent):
             )
 
         pct = score / max_score
+
+        # ── 배당주 하한선: 안정 배당 + 비역성장 → 최소 WATCH 보장 ──────────
+        div_yield = f.get("dividendYield")
+        if (
+            div_yield is not None
+            and div_yield >= 0.02
+            and rev_growth is not None
+            and rev_growth >= 0.0
+            and pct < 0.40
+        ):
+            pct = 0.40
+            metrics["dividend_floor_applied"] = True
+
         metrics["growth_score"] = f"{score}/{max_score} ({pct*100:.0f}%)"
 
         t_sb = self._jitter(0.75)

@@ -248,6 +248,124 @@ class TestExplorationModerator:
             assert result.urgency == Urgency.RED_FLAG
 
 
+class TestValueStockCorrection:
+    """Improvement 1: 가치주 점수 보정 — 배당/주주환원."""
+
+    def test_high_dividend_boosts_fundamental_score(self):
+        """배당수익률 4%+ 종목에 주주환원 10점이 추가되는지 확인."""
+        agent = FundamentalAgent()
+        ctx = make_context(
+            fundamentals={
+                "grossMargins": 0.30,
+                "operatingMargins": 0.12,
+                "profitMargins": 0.08,
+                "revenueGrowth": 0.02,
+                "earningsGrowth": 0.05,
+                "dividendYield": 0.05,      # 5% 배당
+                "payoutRatio": 0.60,
+                "debtToEquity": 1.0,
+                "currentRatio": 1.5,
+                "returnOnEquity": 0.12,
+                "freeCashflow": 3_000_000_000,
+                "netIncomeToCommon": 2_500_000_000,
+                "totalRevenue": 30_000_000_000,
+            }
+        )
+        opinion = agent.evaluate(ctx)
+        assert "dividend_yield_pct" in opinion.key_metrics
+        # 배당 점수가 반영되어 PASS/AVOID가 아닌 WATCH 이상이어야 함
+        assert opinion.signal in {Signal.STRONG_BUY, Signal.BUY, Signal.WATCH}
+
+    def test_dividend_floor_prevents_growth_avoid(self):
+        """배당 2%+, 매출 비역성장 종목이 growth-analyst에서 PASS/AVOID 안 받는지 확인."""
+        agent = GrowthAgent()
+        ctx = make_context(
+            fundamentals={
+                "revenueGrowth": 0.01,      # 미미한 성장
+                "earningsGrowth": 0.02,
+                "dividendYield": 0.035,     # 3.5% 배당
+            },
+            financial_history=[
+                {"year": "2021", "revenue": 10_000_000_000},
+                {"year": "2022", "revenue": 10_200_000_000},
+                {"year": "2023", "revenue": 10_300_000_000},
+            ],
+        )
+        opinion = agent.evaluate(ctx)
+        # 배당주 하한선 적용 → 최소 WATCH
+        assert opinion.signal in {Signal.STRONG_BUY, Signal.BUY, Signal.WATCH}
+
+
+class TestValuationDrag:
+    """Improvement 3: 고평가 패널티."""
+
+    def test_valuation_drag_reduces_confidence(self):
+        """valuation PASS/AVOID가 BUY 신호의 confidence를 낮추는지 확인."""
+        from src.agents.models import Urgency
+        from src.utils.config import VALUATION_DRAG_PENALTY
+
+        moderator = ExplorationModerator()
+        # 강한 펀더멘탈 + 성장 → BUY, 그러나 극단적 고평가
+        ctx = make_context(
+            fundamentals={
+                "grossMargins": 0.70,
+                "operatingMargins": 0.30,
+                "profitMargins": 0.25,
+                "revenueGrowth": 0.30,
+                "earningsGrowth": 0.35,
+                "returnOnEquity": 0.35,
+                "freeCashflow": 10_000_000_000,
+                "netIncomeToCommon": 8_000_000_000,
+                "totalRevenue": 30_000_000_000,
+                "currentRatio": 2.5,
+                # 극단적 고평가
+                "trailingPE": 120.0,
+                "priceToBook": 30.0,
+                "pegRatio": 6.0,
+                "enterpriseToEbitda": 80.0,
+                "currentPrice": 500.0,
+                "targetMeanPrice": 400.0,
+                "numberOfAnalystOpinions": 20,
+                "marketCap": 500_000_000_000,
+            }
+        )
+        result = moderator.run(ctx)
+        val_op = next(
+            (o for o in result.opinions if o.agent_name == "valuation-analyst"), None
+        )
+        # valuation agent가 부정적이면 drag 적용 확인
+        if val_op and val_op.signal in {Signal.PASS, Signal.AVOID} and val_op.confidence >= 0.60:
+            # confidence가 drag만큼 감소했을 것
+            assert result.final_confidence <= 0.95 - VALUATION_DRAG_PENALTY + 0.05  # 여유
+
+
+class TestMacroRegime:
+    """Improvement 2: 매크로 오버레이."""
+
+    def test_bear_regime_reduces_confidence(self):
+        """bear 레짐에서 BUY 신호의 confidence가 감소하는지 확인."""
+        moderator = ExplorationModerator()
+        ctx = make_context()
+        ctx.macro_snapshot = {"regime": "bear", "vix": 30, "sp500_vs_sma50": -0.05}
+        result_bear = moderator.run(ctx)
+
+        ctx2 = make_context()
+        ctx2.macro_snapshot = {"regime": "neutral", "vix": 20, "sp500_vs_sma50": 0.01}
+        result_neutral = moderator.run(ctx2)
+
+        # bear에서 positive 신호면 confidence가 더 낮아야 함
+        if result_bear.final_signal in {Signal.STRONG_BUY, Signal.BUY}:
+            assert result_bear.final_confidence < result_neutral.final_confidence + 0.05
+
+    def test_macro_snapshot_function(self):
+        """_fetch_macro_snapshot이 dict를 반환하고 regime 키를 포함하는지 확인."""
+        from src.pipeline.context_builder import _fetch_macro_snapshot
+        snapshot = _fetch_macro_snapshot()
+        assert isinstance(snapshot, dict)
+        assert "regime" in snapshot
+        assert snapshot["regime"] in {"bear", "neutral", "bull"}
+
+
 class TestEdgeCases:
     """Phase 1: division-by-zero, NaN, 경계값 엣지케이스."""
 

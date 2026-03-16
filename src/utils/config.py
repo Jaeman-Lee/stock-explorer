@@ -153,6 +153,10 @@ RISK_SOFT_VETO_CONFIDENCE = 0.70      # 소프트 거부 (confidence 패널티�
 RISK_HARD_VETO_CONFIDENCE = 0.85      # 하드 거부 (RED_FLAG 격상)
 RISK_SOFT_VETO_PENALTY = 0.15         # 소프트 거부 시 최종 confidence 감산
 
+# ── 밸류에이션 드래그 ──────────────────────────────────────────────────────────
+VALUATION_DRAG_CONFIDENCE = 0.60      # valuation-analyst PASS/AVOID 최소 confidence
+VALUATION_DRAG_PENALTY = 0.10         # 최종 confidence 감산
+
 # ── 데이터 수집 ─────────────────────────────────────────────────────────────
 DEFAULT_LOOKBACK_DAYS = 90
 MARKET_DATA_INTERVAL = "1d"

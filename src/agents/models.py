@@ -84,8 +84,8 @@ class StockAnalysisContext:
     # 뉴스 & 감성 (fin-advisor collection 재사용)
     sentiment_data: list[dict] = field(default_factory=list)    # 최근 뉴스 + 감성점수
 
-    # 매크로 컨텍스트 (fin-advisor FRED 재사용)
-    macro_snapshot: list[dict] = field(default_factory=list)    # FRED 지표 스냅샷
+    # 매크로 컨텍스트 (S&P500/VIX 레짐 판정 + 추후 FRED 확장)
+    macro_snapshot: dict | list[dict] = field(default_factory=dict)  # 시장 레짐 or FRED 스냅샷
 
     # 데이터 품질 (할루시네이션 방지)
     data_quality: DataQuality = field(default_factory=DataQuality)

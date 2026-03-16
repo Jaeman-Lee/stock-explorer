@@ -58,6 +58,9 @@ def build_context(ticker: str, lookback_days: int = 90) -> StockAnalysisContext:
     # ── 섹터 피어 비교 데이터 ──────────────────────────────────────────────
     sector_peers = _fetch_sector_peers(ticker, info)
 
+    # ── 매크로 스냅샷 (시장 레짐 판정) ──────────────────────────────────────
+    macro_snapshot = _fetch_macro_snapshot()
+
     return StockAnalysisContext(
         ticker=ticker,
         company_name=company_name,
@@ -66,8 +69,7 @@ def build_context(ticker: str, lookback_days: int = 90) -> StockAnalysisContext:
         financial_history=financial_history,
         data_quality=data_quality,
         sector_peers=sector_peers,
-        # historical_multiples, sentiment_data, macro_snapshot
-        # 는 추후 확장 (현재는 빈 리스트/dict)
+        macro_snapshot=macro_snapshot,
     )
 
 
@@ -167,6 +169,70 @@ def _fetch_single_peer(ticker: str) -> dict | None:
 
     _peer_cache[ticker] = (now, data)
     return data
+
+
+# ── 매크로 스냅샷 캐시 (모듈 레벨) ─────────────────────────────────────────
+_macro_cache: dict[str, tuple[float, dict]] = {}
+_MACRO_CACHE_TTL = 3600  # 1시간
+
+
+def _fetch_macro_snapshot() -> dict:
+    """S&P500 + VIX로 시장 레짐(bear/neutral/bull)을 판정한다.
+
+    - bear: VIX > 25 AND S&P500 < SMA50
+    - bull: VIX < 18 AND S&P500 > SMA50
+    - else: neutral
+    """
+    now = time.time()
+    if "macro" in _macro_cache:
+        cached_time, cached_data = _macro_cache["macro"]
+        if now - cached_time < _MACRO_CACHE_TTL:
+            return cached_data
+
+    result: dict = {"regime": "neutral", "vix": None, "sp500_vs_sma50": None}
+
+    try:
+        # S&P 500 종가 + SMA50
+        sp = yf.Ticker("^GSPC")
+        sp_hist = sp.history(period="60d", interval="1d")
+        if sp_hist is not None and not sp_hist.empty:
+            if isinstance(sp_hist.columns, pd.MultiIndex):
+                sp_hist.columns = sp_hist.columns.get_level_values(0)
+            sp_close = sp_hist["Close"].dropna()
+            if len(sp_close) >= 2:
+                current_sp = float(sp_close.iloc[-1])
+                sma50 = float(sp_close.tail(50).mean())
+                result["sp500"] = round(current_sp, 2)
+                result["sp500_sma50"] = round(sma50, 2)
+                result["sp500_vs_sma50"] = round(current_sp / sma50 - 1, 4)
+
+        # VIX
+        vix = yf.Ticker("^VIX")
+        vix_hist = vix.history(period="5d", interval="1d")
+        if vix_hist is not None and not vix_hist.empty:
+            if isinstance(vix_hist.columns, pd.MultiIndex):
+                vix_hist.columns = vix_hist.columns.get_level_values(0)
+            vix_close = vix_hist["Close"].dropna()
+            if len(vix_close) >= 1:
+                current_vix = float(vix_close.iloc[-1])
+                result["vix"] = round(current_vix, 2)
+
+        # 레짐 판정
+        vix_val = result.get("vix")
+        sp_vs = result.get("sp500_vs_sma50")
+        if vix_val is not None and sp_vs is not None:
+            if vix_val > 25 and sp_vs < 0:
+                result["regime"] = "bear"
+            elif vix_val < 18 and sp_vs > 0:
+                result["regime"] = "bull"
+            else:
+                result["regime"] = "neutral"
+
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("매크로 스냅샷 수집 실패: %s", exc)
+
+    _macro_cache["macro"] = (now, result)
+    return result
 
 
 def _fetch_market_data(t: yf.Ticker, days: int) -> list[dict]:

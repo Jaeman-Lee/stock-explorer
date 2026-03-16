@@ -1,6 +1,6 @@
 """재무 기반 분석 에이전트.
 
-평가 기준: 수익성, 성장성, 재무건전성, 현금흐름 품질.
+평가 기준: 수익성, 성장성, 재무건전성, 현금흐름 품질, 주주환원.
 fin-advisor의 value_investor + growth_investor 관점을 통합.
 """
 
@@ -14,7 +14,7 @@ class FundamentalAgent(StockAgent):
     """재무제표 기반 기업 품질 평가 에이전트."""
 
     name = "fundamental-analyst"
-    description = "수익성·성장성·재무건전성·현금흐름 품질 종합 평가"
+    description = "수익성·성장성·재무건전성·현금흐름·주주환원 종합 평가"
 
     def evaluate(self, context: StockAnalysisContext) -> AgentOpinion:
         f = context.fundamentals
@@ -72,37 +72,58 @@ class FundamentalAgent(StockAgent):
             else:
                 risk_flags.append(f"순손실 ({net_margin*100:.1f}%)")
 
-        # ── 성장성 (30점) ───────────────────────────────────────────────────
+        # ── 성장성 (20점) ───────────────────────────────────────────────────
         rev_growth = f.get("revenueGrowth")
         earnings_growth = f.get("earningsGrowth")
 
         if rev_growth is not None:
-            max_score += 15
+            max_score += 10
             metrics["revenue_growth_yoy_pct"] = round(rev_growth * 100, 1)
             if rev_growth >= 0.25:
-                score += 15
+                score += 10
                 strengths.append(f"고성장 매출 +{rev_growth*100:.0f}% YoY")
             elif rev_growth >= 0.15:
-                score += 10
+                score += 7
             elif rev_growth >= 0.05:
-                score += 6
+                score += 4
             elif rev_growth >= 0.0:
-                score += 3
+                score += 2
             else:
                 risk_flags.append(f"매출 역성장 {rev_growth*100:.1f}%")
 
         if earnings_growth is not None:
-            max_score += 15
+            max_score += 10
             metrics["earnings_growth_yoy_pct"] = round(earnings_growth * 100, 1)
             if earnings_growth >= 0.20:
-                score += 15
+                score += 10
                 strengths.append(f"이익 고성장 +{earnings_growth*100:.0f}% YoY")
             elif earnings_growth >= 0.10:
-                score += 10
+                score += 7
             elif earnings_growth >= 0.0:
-                score += 5
+                score += 3
             else:
                 risk_flags.append(f"이익 역성장 {earnings_growth*100:.1f}%")
+
+        # ── 주주환원 (10점) ────────────────────────────────────────────────
+        div_yield = f.get("dividendYield")
+        payout_ratio = f.get("payoutRatio")
+
+        if div_yield is not None and div_yield > 0:
+            max_score += 10
+            metrics["dividend_yield_pct"] = round(div_yield * 100, 2)
+            if div_yield >= 0.04:
+                score += 10
+                strengths.append(f"높은 배당수익률 {div_yield*100:.1f}%")
+            elif div_yield >= 0.025:
+                score += 7
+                strengths.append(f"양호한 배당수익률 {div_yield*100:.1f}%")
+            elif div_yield >= 0.015:
+                score += 4
+            else:
+                score += 2
+            if payout_ratio is not None and payout_ratio > 0.80:
+                risk_flags.append(f"높은 배당성향 {payout_ratio*100:.0f}% (지속성 확인 필요)")
+                metrics["payout_ratio_pct"] = round(payout_ratio * 100, 1)
 
         # ── 재무 건전성 (20점) ──────────────────────────────────────────────
         # D/E는 자사주매입으로 왜곡될 수 있어 Net Debt/EBITDA 우선 사용.

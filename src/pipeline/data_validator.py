@@ -26,8 +26,8 @@ METRIC_BOUNDS: dict[str, tuple[float | None, float | None]] = {
     "dividendYield": (0, 1.0),
     "payoutRatio": (-5, 10.0),
     "debtToEquity": (-500, 5000),
-    "freeCashflow": (-1e12, 1e12),
-    "marketCap": (0, 20e12),
+    "freeCashflow": (-2e15, 2e15),      # KRW 단위 대응 (삼성전자 FCF ~23조원)
+    "marketCap": (0, 5e15),              # KRW 단위 대응 (삼성전자 시총 ~400조원)
     "returnOnEquity": (-10, 10),
     "returnOnAssets": (-5, 5),
     "pegRatio": (-100, 500),
