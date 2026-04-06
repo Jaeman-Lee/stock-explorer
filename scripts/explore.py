@@ -156,6 +156,7 @@ def explore_ticker(
     dry_run: bool = False,
     min_signal: Signal | None = None,
     notify: bool = False,
+    strategy: str = "auto",
 ) -> AnalysisEntry | None:
     """단일 종목을 탐험하고 결과를 출력한다. 분석 엔트리를 반환한다."""
     print(f"\n[{ticker}] 데이터 수집 중...", end="", flush=True)
@@ -167,8 +168,8 @@ def explore_ticker(
         logger.error("[%s] 데이터 수집 실패: %s", ticker, e)
         return None
 
-    print(f"[{ticker}] 토론 진행 중...", end="", flush=True)
-    moderator = ExplorationModerator()
+    print(f"[{ticker}] 토론 진행 중 (전략: {strategy})...", end="", flush=True)
+    moderator = ExplorationModerator(strategy=strategy)
     result = moderator.run(context)
     print(" 완료")
 
@@ -257,8 +258,26 @@ def main() -> None:
         "--top", type=int, default=None,
         help="상위 N개 종목만 표시 (confidence 기준)",
     )
+    parser.add_argument(
+        "--strategy", type=str, default="auto",
+        help="신호 결정 전략 (auto/legacy/v1~v6/v3-bear/v3-defensive). auto=매크로 레짐 자동 선택",
+    )
+    parser.add_argument(
+        "--list-strategies", action="store_true",
+        help="사용 가능한 전략 목록 출력",
+    )
 
     args = parser.parse_args()
+
+    if args.list_strategies:
+        from src.agents.signal_strategy import list_strategies
+        print("\n사용 가능한 전략:")
+        print("-" * 60)
+        for s in list_strategies():
+            print(f"  {s['name']:<18} {s['description']}")
+        print(f"\n  {'auto':<18} 매크로 레짐(bull/neutral/bear)에 따라 자동 선택")
+        print(f"                   bull→v6 | neutral→v3 | bear→v3-bear")
+        sys.exit(0)
 
     tickers = args.tickers
     if args.universe:
@@ -294,7 +313,8 @@ def main() -> None:
                    filters.max_debt, filters.sector, filters.top]
     )
 
-    print(f"\n투자 종목 탐험 시작 — {len(tickers)}개 종목")
+    strategy = args.strategy
+    print(f"\n투자 종목 탐험 시작 — {len(tickers)}개 종목 (전략: {strategy})")
     if has_filters:
         active = []
         if filters.max_pe is not None:
@@ -317,6 +337,7 @@ def main() -> None:
         entry = explore_ticker(
             ticker.upper(), dry_run=args.dry_run,
             min_signal=min_signal, notify=args.notify,
+            strategy=strategy,
         )
         if entry is not None:
             entries.append(entry)

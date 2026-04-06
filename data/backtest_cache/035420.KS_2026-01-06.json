@@ -1,0 +1,93 @@
+{
+  "ticker": "035420.KS",
+  "signal_date": "2026-01-06",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "buy",
+      "confidence": 0.63,
+      "rationale": "양호한 펀더멘탈 (64%). 높은 매출총이익률 100% (경쟁우위 시사).",
+      "risk_flags": [
+        "이익 역성장 -43.7%",
+        "⚠ dividendYield=1.34 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "높은 매출총이익률 100% (경쟁우위 시사)",
+        "우수한 영업이익률 19%",
+        "순현금 포지션 (8946.0B > 부채 4608.6B)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.86,
+      "rationale": "매력적인 밸류에이션 (91%). forward P/E 12.7x — 섹터 평균 대비 43% 할인, EV/EBITDA 8.9x — 섹터 대비 저평가.",
+      "risk_flags": [
+        "⚠ dividendYield=1.34 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "forward P/E 12.7x — 섹터 평균 대비 43% 할인",
+        "EV/EBITDA 8.9x — 섹터 대비 저평가"
+      ]
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "buy",
+      "confidence": 0.57,
+      "rationale": "견조한 성장세 (54%). 애널리스트 컨센서스 상승 여력 62%.",
+      "risk_flags": [
+        "EPS 역성장 -43.7%",
+        "⚠ dividendYield=1.34 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "애널리스트 컨센서스 상승 여력 62%"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.69,
+      "rationale": "어느 정도의 경쟁우위 (67%). 매출총이익률 100% — 동종 대비 40%p 우위 (강한 가격결정력).",
+      "risk_flags": [
+        "비용 증가 매출 초과 (1.0x)",
+        "⚠ dividendYield=1.34 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "매출총이익률 100% — 동종 대비 40%p 우위 (강한 가격결정력)",
+        "시장 지위 상위 20% — 업계 리더"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.69,
+      "rationale": "기술적 매수 우세 (64%). RSI 34 — 저RSI 진입 기회.",
+      "risk_flags": [
+        "MACD 데드크로스 또는 약세 구간",
+        "⚠ dividendYield=1.34 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "RSI 34 — 저RSI 진입 기회",
+        "볼린저 하단 근접 (6%) — 과매도 반등 구간"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.8,
+      "rationale": "매우 낮은 리스크 (9%). 순현금 포지션 (현금 8946.0B > 부채 4608.6B), 플러스 FCF 1,463,913,021,440.",
+      "risk_flags": [
+        "⚠ dividendYield=1.34 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "순현금 포지션 (현금 8946.0B > 부채 4608.6B)",
+        "플러스 FCF 1,463,913,021,440"
+      ]
+    }
+  ],
+  "price_at_signal": 257297.234375,
+  "price_current": 196800.0,
+  "return_pct": -23.51,
+  "cached_at": "2026-04-06T16:37:58"
+}

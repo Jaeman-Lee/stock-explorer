@@ -1,0 +1,89 @@
+{
+  "ticker": "UNH",
+  "signal_date": "2026-01-06",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "pass",
+      "confidence": 0.55,
+      "rationale": "펀더멘탈 미흡 (34%). 낮은 매출총이익률 19%.",
+      "risk_flags": [
+        "낮은 매출총이익률 19%",
+        "이익 역성장 -99.9%",
+        "유동성 위험 current ratio 0.8x",
+        "⚠ dividendYield=3.19 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "FCF/순이익 1.1x — 이익 현금 전환 우수"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "buy",
+      "confidence": 0.73,
+      "rationale": "합리적인 가격 수준 (74%). trailing P/E 21.0x — 섹터 평균 대비 51% 할인.",
+      "risk_flags": [
+        "⚠ dividendYield=3.19 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "trailing P/E 21.0x — 섹터 평균 대비 51% 할인"
+      ]
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "watch",
+      "confidence": 0.46,
+      "rationale": "성장 둔화 또는 불확실 (44%). 추이 모니터링 필요.",
+      "risk_flags": [
+        "EPS 역성장 -99.9%",
+        "⚠ dividendYield=3.19 이상값 — 제외됨."
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "pass",
+      "confidence": 0.55,
+      "rationale": "해자 취약 (21%). 매출총이익률 매우 낮음 (19%).",
+      "risk_flags": [
+        "매출총이익률 매우 낮음 (19%)",
+        "매출총이익률 수축 추이 — 경쟁 압박 또는 원가 상승",
+        "비용 증가 매출 초과 (1.0x)",
+        "⚠ dividendYield=3.19 이상값 — 제외됨."
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.7,
+      "rationale": "기술적 매수 우세 (71%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [
+        "⚠ dividendYield=3.19 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "pass",
+      "confidence": 0.6,
+      "rationale": "주요 리스크 존재 (67%). Net Debt/EBITDA 2.5x — 다소 높음.",
+      "risk_flags": [
+        "Net Debt/EBITDA 2.5x — 다소 높음",
+        "유동성 위기 current ratio 0.79x",
+        "⚠ dividendYield=3.19 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "플러스 FCF 13,863,249,920"
+      ]
+    }
+  ],
+  "price_at_signal": 346.2779235839844,
+  "price_current": 277.260009765625,
+  "return_pct": -19.93,
+  "cached_at": "2026-04-06T16:37:38"
+}

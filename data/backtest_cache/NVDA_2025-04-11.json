@@ -1,0 +1,91 @@
+{
+  "ticker": "NVDA",
+  "signal_date": "2025-04-11",
+  "regime": "bear",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.81,
+      "rationale": "펀더멘탈 최상위권 (88%). 높은 매출총이익률 71% (경쟁우위 시사), 우수한 영업이익률 65%.",
+      "risk_flags": [],
+      "strengths": [
+        "높은 매출총이익률 71% (경쟁우위 시사)",
+        "우수한 영업이익률 65%",
+        "고성장 매출 +73% YoY",
+        "이익 고성장 +96% YoY",
+        "순현금 포지션 (62.6B > 부채 11.4B)",
+        "높은 ROE 101% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "avoid",
+      "confidence": 0.69,
+      "rationale": "심각한 고평가 (0%). trailing P/E 36.2x — 심각한 고평가; P/B 27.4x 고평가.",
+      "risk_flags": [
+        "trailing P/E 36.2x — 심각한 고평가",
+        "P/B 27.4x 고평가",
+        "P/FCF 74.2x 높음",
+        "EV/EBITDA 32.0x — 섹터 대비 고평가"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.84,
+      "rationale": "강한 성장 모멘텀 (90%). 하이퍼 성장 매출 +73% YoY, EPS 고성장 +96% YoY.",
+      "risk_flags": [
+        "성장률 변동 불안정"
+      ],
+      "strengths": [
+        "하이퍼 성장 매출 +73% YoY",
+        "EPS 고성장 +96% YoY",
+        "3년 매출 CAGR 100% — 지속적 고성장",
+        "애널리스트 컨센서스 상승 여력 51%"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.83,
+      "rationale": "강한 경쟁 해자 확인 (91%). 매출총이익률 71% — 업종 상위권, ROE 101% — 자본 효율성 탁월 (해자 시사).",
+      "risk_flags": [],
+      "strengths": [
+        "매출총이익률 71% — 업종 상위권",
+        "ROE 101% — 자본 효율성 탁월 (해자 시사)",
+        "ROA 51% — 자산 운용 우수",
+        "영업 레버리지 1.6x — 규모의 경제 작동",
+        "시장 지위 상위 20% — 업계 리더"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.7,
+      "rationale": "기술적 매수 우세 (71%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (0%). 순현금 포지션 (현금 62.6B > 부채 11.4B), 양호한 유동성 current ratio 3.9x.",
+      "risk_flags": [],
+      "strengths": [
+        "순현금 포지션 (현금 62.6B > 부채 11.4B)",
+        "양호한 유동성 current ratio 3.9x",
+        "플러스 FCF 58,128,998,400"
+      ]
+    }
+  ],
+  "price_at_signal": 110.90386199951172,
+  "price_current": 177.38999938964844,
+  "return_pct": 59.95,
+  "cached_at": "2026-04-06T16:39:31"
+}

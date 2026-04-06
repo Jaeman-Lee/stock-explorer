@@ -1,0 +1,98 @@
+{
+  "ticker": "TSM",
+  "signal_date": "2025-04-11",
+  "regime": "bear",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.84,
+      "rationale": "펀더멘탈 최상위권 (90%). 높은 매출총이익률 60% (경쟁우위 시사), 우수한 영업이익률 54%.",
+      "risk_flags": [
+        "⚠ dividendYield=1.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "높은 매출총이익률 60% (경쟁우위 시사)",
+        "우수한 영업이익률 54%",
+        "이익 고성장 +35% YoY",
+        "순현금 포지션 (3068.5B > 부채 1068.4B)",
+        "높은 ROE 35% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "buy",
+      "confidence": 0.56,
+      "rationale": "합리적인 가격 수준 (57%). P/FCF 2.7x — 현금흐름 대비 저평가.",
+      "risk_flags": [
+        "trailing P/E 32.7x — 섹터 대비 14% 프리미엄",
+        "P/B 51.9x 고평가",
+        "⚠ dividendYield=1.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "P/FCF 2.7x — 현금흐름 대비 저평가",
+        "EV/EBITDA 2.6x — 섹터 대비 저평가"
+      ]
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.77,
+      "rationale": "강한 성장 모멘텀 (79%). 고성장 매출 +20% YoY, EPS 고성장 +35% YoY.",
+      "risk_flags": [
+        "⚠ dividendYield=1.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "고성장 매출 +20% YoY",
+        "EPS 고성장 +35% YoY"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.63,
+      "rationale": "어느 정도의 경쟁우위 (64%). 매출총이익률 확장 추이 — 가격결정력 강화.",
+      "risk_flags": [
+        "매출총이익률 업종 하위 (60% vs 동종 66%)",
+        "⚠ dividendYield=1.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "매출총이익률 확장 추이 — 가격결정력 강화",
+        "ROE 35% — 자본 효율성 탁월 (해자 시사)",
+        "ROA 17% — 자산 운용 우수",
+        "영업 레버리지 2.2x — 규모의 경제 작동"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.72,
+      "rationale": "기술적 매수 우세 (71%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [
+        "⚠ dividendYield=1.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (0%). 순현금 포지션 (현금 3068.5B > 부채 1068.4B), 양호한 유동성 current ratio 2.6x.",
+      "risk_flags": [
+        "⚠ dividendYield=1.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "순현금 포지션 (현금 3068.5B > 부채 1068.4B)",
+        "양호한 유동성 current ratio 2.6x",
+        "플러스 FCF 643,449,290,752"
+      ]
+    }
+  ],
+  "price_at_signal": 155.15829467773438,
+  "price_current": 339.0400085449219,
+  "return_pct": 118.51,
+  "cached_at": "2026-04-06T16:39:33"
+}

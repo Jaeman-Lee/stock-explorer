@@ -1,0 +1,94 @@
+{
+  "ticker": "HD",
+  "signal_date": "2026-01-06",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "watch",
+      "confidence": 0.46,
+      "rationale": "펀더멘탈 보통 수준 (49%). 개선 추이 확인 필요.",
+      "risk_flags": [
+        "매출 역성장 -3.8%",
+        "이익 역성장 -14.2%",
+        "⚠ dividendYield=2.9 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "우수한 영업이익률 10%",
+        "높은 ROE 146% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "buy",
+      "confidence": 0.63,
+      "rationale": "합리적인 가격 수준 (61%). trailing P/E 22.6x — 섹터 평균 대비 78% 할인.",
+      "risk_flags": [
+        "P/B 25.0x 고평가",
+        "⚠ dividendYield=2.9 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "trailing P/E 22.6x — 섹터 평균 대비 78% 할인",
+        "EV/EBITDA 15.4x — 섹터 대비 저평가"
+      ]
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "pass",
+      "confidence": 0.55,
+      "rationale": "성장성 미흡 (19%). 매출 역성장 -3.8%.",
+      "risk_flags": [
+        "매출 역성장 -3.8%",
+        "EPS 역성장 -14.2%",
+        "낮은 3년 CAGR 1.5%",
+        "⚠ dividendYield=2.9 이상값 — 제외됨."
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.57,
+      "rationale": "어느 정도의 경쟁우위 (56%). ROE 146% — 자본 효율성 탁월 (해자 시사).",
+      "risk_flags": [
+        "매출총이익률 업종 하위 (33% vs 동종 42%)",
+        "비용 증가 매출 초과 (0.5x)",
+        "⚠ dividendYield=2.9 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "ROE 146% — 자본 효율성 탁월 (해자 시사)"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.75,
+      "rationale": "기술적 매수 우세 (77%). RSI 34 — 저RSI 진입 기회.",
+      "risk_flags": [
+        "⚠ dividendYield=2.9 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "RSI 34 — 저RSI 진입 기회",
+        "MACD 골든크로스 또는 강세 구간",
+        "볼린저 하단부 (19%) — 저점 매수 기회"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "watch",
+      "confidence": 0.51,
+      "rationale": "보통 수준의 리스크 (31%). 모니터링 권장.",
+      "risk_flags": [
+        "Net Debt/EBITDA 2.6x — 다소 높음",
+        "⚠ dividendYield=2.9 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "플러스 FCF 8,622,749,696"
+      ]
+    }
+  ],
+  "price_at_signal": 346.9703063964844,
+  "price_current": 321.6300048828125,
+  "return_pct": -7.3,
+  "cached_at": "2026-04-06T16:37:46"
+}

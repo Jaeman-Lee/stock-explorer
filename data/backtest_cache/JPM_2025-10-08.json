@@ -1,0 +1,87 @@
+{
+  "ticker": "JPM",
+  "signal_date": "2025-10-08",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "watch",
+      "confidence": 0.43,
+      "rationale": "펀더멘탈 보통 수준 (56%). 개선 추이 확인 필요.",
+      "risk_flags": [
+        "낮은 매출총이익률 0%",
+        "이익 역성장 -3.6%",
+        "⚠ dividendYield=2.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "우수한 영업이익률 41%",
+        "순현금 포지션 (1287.7B > 부채 1026.0B)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "watch",
+      "confidence": 0.39,
+      "rationale": "밸류에이션 다소 부담 (45%). 조정 시 재평가 권장.",
+      "risk_flags": [
+        "⚠ dividendYield=2.04 이상값 — 제외됨."
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "watch",
+      "confidence": 0.43,
+      "rationale": "성장 둔화 또는 불확실 (34%). 추이 모니터링 필요.",
+      "risk_flags": [
+        "EPS 역성장 -3.6%",
+        "⚠ dividendYield=2.04 이상값 — 제외됨."
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "watch",
+      "confidence": 0.43,
+      "rationale": "해자 약하거나 불명확 (42%). 추가 조사 필요.",
+      "risk_flags": [
+        "매출총이익률 매우 낮음 (0%)",
+        "ROA 낮음 (1.4%)",
+        "⚠ dividendYield=2.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "ROE 16% — 업종 상위권"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.57,
+      "rationale": "기술적 매수 우세 (56%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [
+        "볼린저 상단 근접 (86%) — 과매수 주의",
+        "⚠ dividendYield=2.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.74,
+      "rationale": "매우 낮은 리스크 (0%). 순현금 포지션 (현금 1287.7B > 부채 1026.0B).",
+      "risk_flags": [
+        "⚠ dividendYield=2.04 이상값 — 제외됨."
+      ],
+      "strengths": [
+        "순현금 포지션 (현금 1287.7B > 부채 1026.0B)"
+      ]
+    }
+  ],
+  "price_at_signal": 302.6647644042969,
+  "price_current": 294.6000061035156,
+  "return_pct": -2.66,
+  "cached_at": "2026-04-06T16:37:09"
+}

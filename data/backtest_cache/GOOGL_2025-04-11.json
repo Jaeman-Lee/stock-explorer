@@ -1,0 +1,89 @@
+{
+  "ticker": "GOOGL",
+  "signal_date": "2025-04-11",
+  "regime": "bear",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.83,
+      "rationale": "펀더멘탈 최상위권 (87%). 높은 매출총이익률 60% (경쟁우위 시사), 우수한 영업이익률 32%.",
+      "risk_flags": [
+        "낮은 FCF 전환율 0.3x"
+      ],
+      "strengths": [
+        "높은 매출총이익률 60% (경쟁우위 시사)",
+        "우수한 영업이익률 32%",
+        "이익 고성장 +31% YoY",
+        "높은 배당수익률 28.0%",
+        "순현금 포지션 (126.8B > 부채 67.0B)",
+        "높은 ROE 36% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "avoid",
+      "confidence": 0.69,
+      "rationale": "심각한 고평가 (0%). trailing P/E 27.4x — 심각한 고평가; P/B 8.6x 고평가.",
+      "risk_flags": [
+        "trailing P/E 27.4x — 심각한 고평가",
+        "P/B 8.6x 고평가",
+        "P/FCF 93.9x 높음",
+        "EV/EBITDA 23.4x — 섹터 대비 고평가"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "buy",
+      "confidence": 0.75,
+      "rationale": "견조한 성장세 (72%). EPS 고성장 +31% YoY.",
+      "risk_flags": [],
+      "strengths": [
+        "EPS 고성장 +31% YoY"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.78,
+      "rationale": "강한 경쟁 해자 확인 (84%). 매출총이익률 확장 추이 — 가격결정력 강화, ROE 36% — 자본 효율성 탁월 (해자 시사).",
+      "risk_flags": [
+        "비용 증가 매출 초과 (0.7x)"
+      ],
+      "strengths": [
+        "매출총이익률 확장 추이 — 가격결정력 강화",
+        "ROE 36% — 자본 효율성 탁월 (해자 시사)",
+        "ROA 15% — 자산 운용 우수",
+        "시장 지위 상위 20% — 업계 리더"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.7,
+      "rationale": "기술적 매수 우세 (71%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (0%). 순현금 포지션 (현금 126.8B > 부채 67.0B), 양호한 유동성 current ratio 2.0x.",
+      "risk_flags": [],
+      "strengths": [
+        "순현금 포지션 (현금 126.8B > 부채 67.0B)",
+        "양호한 유동성 current ratio 2.0x",
+        "플러스 FCF 38,088,376,320"
+      ]
+    }
+  ],
+  "price_at_signal": 156.59701538085938,
+  "price_current": 295.7699890136719,
+  "return_pct": 88.87,
+  "cached_at": "2026-04-06T16:39:26"
+}

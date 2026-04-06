@@ -10,6 +10,8 @@ import datetime
 import random
 from collections import Counter
 
+import logging
+
 from src.utils.config import (
     ENABLE_JITTER,
     JITTER_RANGE,
@@ -21,6 +23,9 @@ from src.utils.config import (
 )
 
 from src.agents.base_agent import StockAgent
+from src.agents.signal_strategy import apply_strategy, get_strategy, StrategyParams
+
+logger = logging.getLogger(__name__)
 from src.agents.fundamental_agent import FundamentalAgent
 from src.agents.growth_agent import GrowthAgent
 from src.agents.moat_agent import MoatAgent
@@ -49,7 +54,7 @@ class ExplorationModerator:
     Phase 5: 결과 조립
     """
 
-    def __init__(self) -> None:
+    def __init__(self, strategy: str = "auto") -> None:
         self.agents: list[StockAgent] = [
             FundamentalAgent(),
             ValuationAgentLazy(),   # 지연 임포트 방지를 위한 래퍼
@@ -58,6 +63,7 @@ class ExplorationModerator:
             MomentumAgent(),
             RiskAgent(),
         ]
+        self._strategy_name = strategy
 
     def run(self, context: StockAnalysisContext) -> ExplorationResult:
         """전체 탐험 토론 프로세스를 실행한다."""
@@ -71,10 +77,27 @@ class ExplorationModerator:
         vote_tally = self._tally_votes(opinions)
 
         # Phase 4: 최종 신호 + 긴급도
-        final_signal = self._determine_signal(opinions, vote_tally)
+        # 매크로 레짐 판정
+        macro = context.macro_snapshot
+        regime = "neutral"
+        if isinstance(macro, dict):
+            regime = macro.get("regime", "neutral")
+
+        # 전략 선택 및 적용
+        strategy_params = get_strategy(self._strategy_name, macro_regime=regime)
+
+        if strategy_params.name == "legacy":
+            # 기존 로직 (하위 호환)
+            final_signal = self._determine_signal(opinions, vote_tally)
+        else:
+            final_signal, strategy_note = apply_strategy(
+                strategy_params, opinions, macro_regime=regime,
+            )
+            logger.info("%s %s → %s", context.ticker, strategy_note, final_signal.value)
+
         final_confidence = self._compute_confidence(opinions, final_signal)
 
-        # Valuation drag: BUY/STRONG_BUY인데 밸류에이션 에이전트가 부정적이면 패널티
+        # Valuation drag (legacy와 전략 모두 적용)
         val_opinion = next(
             (o for o in opinions if o.agent_name == "valuation-analyst"), None
         )
@@ -86,11 +109,7 @@ class ExplorationModerator:
         ):
             final_confidence -= VALUATION_DRAG_PENALTY
 
-        # Macro regime 반영
-        macro = context.macro_snapshot
-        regime = None
-        if isinstance(macro, dict):
-            regime = macro.get("regime")
+        # Macro confidence 조정
         if regime and final_signal in POSITIVE_SIGNALS:
             if regime == "bear":
                 final_confidence -= 0.10

@@ -1,0 +1,84 @@
+{
+  "ticker": "GE",
+  "signal_date": "2025-04-11",
+  "regime": "bear",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.81,
+      "rationale": "펀더멘탈 최상위권 (85%). 높은 매출총이익률 31% (경쟁우위 시사), 우수한 영업이익률 20%.",
+      "risk_flags": [],
+      "strengths": [
+        "높은 매출총이익률 31% (경쟁우위 시사)",
+        "우수한 영업이익률 20%",
+        "이익 고성장 +37% YoY",
+        "높은 배당수익률 67.0%",
+        "Net Debt/EBITDA 0.9x — 낮은 실질 부채",
+        "높은 ROE 45% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "pass",
+      "confidence": 0.6,
+      "rationale": "고평가 상태 (15%). P/B 15.8x 고평가.",
+      "risk_flags": [
+        "P/B 15.8x 고평가",
+        "P/FCF 56.9x 높음",
+        "EV/EBITDA 28.5x — 섹터 대비 고평가"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.78,
+      "rationale": "강한 성장 모멘텀 (77%). EPS 고성장 +37% YoY, 성장 가속 추이 확인.",
+      "risk_flags": [],
+      "strengths": [
+        "EPS 고성장 +37% YoY",
+        "성장 가속 추이 확인"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.69,
+      "rationale": "어느 정도의 경쟁우위 (69%). ROE 45% — 자본 효율성 탁월 (해자 시사).",
+      "risk_flags": [],
+      "strengths": [
+        "ROE 45% — 자본 효율성 탁월 (해자 시사)",
+        "영업 레버리지 2.5x — 규모의 경제 작동"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.57,
+      "rationale": "기술적 매수 우세 (55%). RSI 39 — 저RSI 진입 기회.",
+      "risk_flags": [
+        "MACD 데드크로스 또는 약세 구간"
+      ],
+      "strengths": [
+        "RSI 39 — 저RSI 진입 기회",
+        "볼린저 하단부 (22%) — 저점 매수 기회"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (9%). Net Debt/EBITDA 0.9x — 부채 상환 여유 충분, 플러스 FCF 5,210,999,808.",
+      "risk_flags": [],
+      "strengths": [
+        "Net Debt/EBITDA 0.9x — 부채 상환 여유 충분",
+        "플러스 FCF 5,210,999,808"
+      ]
+    }
+  ],
+  "price_at_signal": 180.7135009765625,
+  "price_current": 281.1600036621094,
+  "return_pct": 55.58,
+  "cached_at": "2026-04-06T16:40:01"
+}

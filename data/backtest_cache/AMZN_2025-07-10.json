@@ -1,0 +1,84 @@
+{
+  "ticker": "AMZN",
+  "signal_date": "2025-07-10",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "buy",
+      "confidence": 0.63,
+      "rationale": "양호한 펀더멘탈 (68%). 높은 매출총이익률 50% (경쟁우위 시사).",
+      "risk_flags": [],
+      "strengths": [
+        "높은 매출총이익률 50% (경쟁우위 시사)",
+        "우수한 영업이익률 11%",
+        "Net Debt/EBITDA 0.4x — 낮은 실질 부채",
+        "높은 ROE 22% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "buy",
+      "confidence": 0.59,
+      "rationale": "합리적인 가격 수준 (60%). trailing P/E 29.3x — 섹터 평균 대비 72% 할인.",
+      "risk_flags": [
+        "P/FCF 94.6x 높음"
+      ],
+      "strengths": [
+        "trailing P/E 29.3x — 섹터 평균 대비 72% 할인",
+        "EV/EBITDA 15.8x — 섹터 대비 저평가"
+      ]
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "buy",
+      "confidence": 0.59,
+      "rationale": "견조한 성장세 (59%). 애널리스트 컨센서스 상승 여력 34%.",
+      "risk_flags": [],
+      "strengths": [
+        "애널리스트 컨센서스 상승 여력 34%"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.76,
+      "rationale": "강한 경쟁 해자 확인 (76%). 매출총이익률 50% — 업종 상위권, 매출총이익률 확장 추이 — 가격결정력 강화.",
+      "risk_flags": [
+        "비용 증가 매출 초과 (0.8x)"
+      ],
+      "strengths": [
+        "매출총이익률 50% — 업종 상위권",
+        "매출총이익률 확장 추이 — 가격결정력 강화",
+        "ROE 22% — 업종 상위권",
+        "시장 지위 상위 20% — 업계 리더"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.71,
+      "rationale": "기술적 매수 우세 (71%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (9%). Net Debt/EBITDA 0.4x — 부채 상환 여유 충분, 플러스 FCF 23,793,125,376.",
+      "risk_flags": [],
+      "strengths": [
+        "Net Debt/EBITDA 0.4x — 부채 상환 여유 충분",
+        "플러스 FCF 23,793,125,376"
+      ]
+    }
+  ],
+  "price_at_signal": 222.25999450683594,
+  "price_current": 209.77000427246094,
+  "return_pct": -5.62,
+  "cached_at": "2026-04-06T16:38:41"
+}

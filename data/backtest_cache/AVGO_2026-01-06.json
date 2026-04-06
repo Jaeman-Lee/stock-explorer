@@ -1,0 +1,89 @@
+{
+  "ticker": "AVGO",
+  "signal_date": "2026-01-06",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.86,
+      "rationale": "펀더멘탈 최상위권 (94%). 높은 매출총이익률 77% (경쟁우위 시사), 우수한 영업이익률 45%.",
+      "risk_flags": [],
+      "strengths": [
+        "높은 매출총이익률 77% (경쟁우위 시사)",
+        "우수한 영업이익률 45%",
+        "고성장 매출 +30% YoY",
+        "이익 고성장 +32% YoY",
+        "높은 배당수익률 83.0%",
+        "높은 ROE 33% (자본효율성 우수)",
+        "FCF/순이익 1.0x — 이익 현금 전환 우수"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "avoid",
+      "confidence": 0.69,
+      "rationale": "심각한 고평가 (0%). trailing P/E 61.3x — 심각한 고평가; P/B 18.7x 고평가.",
+      "risk_flags": [
+        "trailing P/E 61.3x — 심각한 고평가",
+        "P/B 18.7x 고평가",
+        "P/FCF 58.5x 높음",
+        "EV/EBITDA 41.4x — 섹터 대비 고평가"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.78,
+      "rationale": "강한 성장 모멘텀 (84%). 고성장 매출 +30% YoY, EPS 고성장 +32% YoY.",
+      "risk_flags": [
+        "성장률 변동 불안정"
+      ],
+      "strengths": [
+        "고성장 매출 +30% YoY",
+        "EPS 고성장 +32% YoY",
+        "3년 매출 CAGR 24% — 지속적 고성장",
+        "애널리스트 컨센서스 상승 여력 50%"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.64,
+      "rationale": "어느 정도의 경쟁우위 (61%). 매출총이익률 77% — 업종 상위권.",
+      "risk_flags": [
+        "비용 증가 매출 초과 (-14.2x)"
+      ],
+      "strengths": [
+        "매출총이익률 77% — 업종 상위권",
+        "ROE 33% — 자본 효율성 탁월 (해자 시사)"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "watch",
+      "confidence": 0.5,
+      "rationale": "기술적 중립 (44%). 추세 방향 확인 후 진입.",
+      "risk_flags": [
+        "MACD 데드크로스 또는 약세 구간"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (9%). 양호한 유동성 current ratio 1.9x, 플러스 FCF 25,503,750,144.",
+      "risk_flags": [],
+      "strengths": [
+        "양호한 유동성 current ratio 1.9x",
+        "플러스 FCF 25,503,750,144"
+      ]
+    }
+  ],
+  "price_at_signal": 343.0503845214844,
+  "price_current": 314.54998779296875,
+  "return_pct": -8.31,
+  "cached_at": "2026-04-06T16:38:01"
+}

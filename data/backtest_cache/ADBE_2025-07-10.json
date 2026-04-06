@@ -1,0 +1,87 @@
+{
+  "ticker": "ADBE",
+  "signal_date": "2025-07-10",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.8,
+      "rationale": "펀더멘탈 최상위권 (82%). 높은 매출총이익률 89% (경쟁우위 시사), 우수한 영업이익률 39%.",
+      "risk_flags": [],
+      "strengths": [
+        "높은 매출총이익률 89% (경쟁우위 시사)",
+        "우수한 영업이익률 39%",
+        "순현금 포지션 (6.9B > 부채 6.7B)",
+        "높은 ROE 59% (자본효율성 우수)",
+        "FCF/순이익 1.3x — 이익 현금 전환 우수"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.78,
+      "rationale": "매력적인 밸류에이션 (81%). trailing P/E 14.2x — 섹터 평균 대비 51% 할인, P/FCF 10.6x — 현금흐름 대비 저평가.",
+      "risk_flags": [
+        "P/B 8.6x 고평가"
+      ],
+      "strengths": [
+        "trailing P/E 14.2x — 섹터 평균 대비 51% 할인",
+        "P/FCF 10.6x — 현금흐름 대비 저평가",
+        "EV/EBITDA 10.3x — 섹터 대비 저평가"
+      ]
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "buy",
+      "confidence": 0.6,
+      "rationale": "견조한 성장세 (59%). 애널리스트 컨센서스 상승 여력 35%.",
+      "risk_flags": [],
+      "strengths": [
+        "애널리스트 컨센서스 상승 여력 35%"
+      ]
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.68,
+      "rationale": "어느 정도의 경쟁우위 (69%). 매출총이익률 89% — 동종 대비 24%p 우위 (강한 가격결정력).",
+      "risk_flags": [
+        "시장 지위 하위권"
+      ],
+      "strengths": [
+        "매출총이익률 89% — 동종 대비 24%p 우위 (강한 가격결정력)",
+        "ROE 59% — 자본 효율성 탁월 (해자 시사)",
+        "ROA 19% — 자산 운용 우수"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.77,
+      "rationale": "강한 기술적 매수 신호 (81%). RSI 40 — 저RSI 진입 기회, MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [],
+      "strengths": [
+        "RSI 40 — 저RSI 진입 기회",
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화",
+        "볼린저 하단부 (34%) — 저점 매수 기회"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (5%). 순현금 포지션 (현금 6.9B > 부채 6.7B), 플러스 FCF 9,321,374,720.",
+      "risk_flags": [],
+      "strengths": [
+        "순현금 포지션 (현금 6.9B > 부채 6.7B)",
+        "플러스 FCF 9,321,374,720"
+      ]
+    }
+  ],
+  "price_at_signal": 371.42999267578125,
+  "price_current": 242.9199981689453,
+  "return_pct": -34.6,
+  "cached_at": "2026-04-06T16:39:19"
+}

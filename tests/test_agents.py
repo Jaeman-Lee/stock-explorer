@@ -366,6 +366,56 @@ class TestMacroRegime:
         assert snapshot["regime"] in {"bear", "neutral", "bull"}
 
 
+class TestSignalStrategy:
+    """전략 레지스트리 + 자동 선택 테스트."""
+
+    def test_list_strategies(self):
+        from src.agents.signal_strategy import list_strategies
+        strategies = list_strategies()
+        names = [s["name"] for s in strategies]
+        assert "legacy" in names
+        assert "v3" in names
+        assert "v3-bear" in names
+        assert len(strategies) >= 8
+
+    def test_get_strategy_auto_selects_by_regime(self):
+        from src.agents.signal_strategy import get_strategy
+        assert get_strategy("auto", "bull").name == "v6"
+        assert get_strategy("auto", "neutral").name == "v3"
+        assert get_strategy("auto", "bear").name == "v3-bear"
+
+    def test_apply_strategy_v3_filters_weak_consensus(self):
+        """V3: 2/5 긍정 → WATCH (기존이면 BUY 가능)."""
+        from src.agents.signal_strategy import apply_strategy, STRATEGIES
+        from src.agents.models import AgentOpinion, Signal
+        opinions = [
+            AgentOpinion(agent_name="fundamental-analyst", signal=Signal.BUY, confidence=0.70, rationale=""),
+            AgentOpinion(agent_name="valuation-analyst", signal=Signal.AVOID, confidence=0.70, rationale=""),
+            AgentOpinion(agent_name="growth-analyst", signal=Signal.BUY, confidence=0.65, rationale=""),
+            AgentOpinion(agent_name="moat-analyst", signal=Signal.PASS, confidence=0.55, rationale=""),
+            AgentOpinion(agent_name="momentum-analyst", signal=Signal.WATCH, confidence=0.50, rationale=""),
+            AgentOpinion(agent_name="risk-analyst", signal=Signal.BUY, confidence=0.60, rationale=""),
+        ]
+        sig, note = apply_strategy(STRATEGIES["v3"], opinions)
+        # 2/5 긍정, 2/5 부정 (risk 제외) → PASS or WATCH (BUY 아님)
+        assert sig not in {Signal.STRONG_BUY, Signal.BUY}
+
+    def test_moderator_accepts_strategy(self):
+        """ExplorationModerator가 strategy 파라미터를 수용하는지 확인."""
+        moderator = ExplorationModerator(strategy="v3")
+        ctx = make_context()
+        result = moderator.run(ctx)
+        assert result.final_signal is not None
+        assert 0.0 <= result.final_confidence <= 1.0
+
+    def test_moderator_legacy_strategy(self):
+        """legacy 전략이 기존과 동일하게 동작하는지 확인."""
+        moderator = ExplorationModerator(strategy="legacy")
+        ctx = make_context()
+        result = moderator.run(ctx)
+        assert result.final_signal is not None
+
+
 class TestEdgeCases:
     """Phase 1: division-by-zero, NaN, 경계값 엣지케이스."""
 

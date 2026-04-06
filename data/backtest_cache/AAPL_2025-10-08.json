@@ -1,0 +1,81 @@
+{
+  "ticker": "AAPL",
+  "signal_date": "2025-10-08",
+  "regime": "bull",
+  "opinions": [
+    {
+      "agent": "fundamental-analyst",
+      "signal": "strong_buy",
+      "confidence": 0.8,
+      "rationale": "펀더멘탈 최상위권 (80%). 우수한 영업이익률 35%, 높은 배당수익률 41.0%.",
+      "risk_flags": [],
+      "strengths": [
+        "우수한 영업이익률 35%",
+        "높은 배당수익률 41.0%",
+        "Net Debt/EBITDA 0.2x — 낮은 실질 부채",
+        "높은 ROE 152% (자본효율성 우수)"
+      ]
+    },
+    {
+      "agent": "valuation-analyst",
+      "signal": "pass",
+      "confidence": 0.6,
+      "rationale": "고평가 상태 (18%). trailing P/E 32.4x — 섹터 대비 16% 프리미엄.",
+      "risk_flags": [
+        "trailing P/E 32.4x — 섹터 대비 16% 프리미엄",
+        "P/B 42.7x 고평가"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "growth-analyst",
+      "signal": "watch",
+      "confidence": 0.46,
+      "rationale": "성장 둔화 또는 불확실 (50%). 추이 모니터링 필요.",
+      "risk_flags": [
+        "낮은 3년 CAGR 1.8%"
+      ],
+      "strengths": []
+    },
+    {
+      "agent": "moat-analyst",
+      "signal": "buy",
+      "confidence": 0.65,
+      "rationale": "어느 정도의 경쟁우위 (63%). ROE 152% — 자본 효율성 탁월 (해자 시사).",
+      "risk_flags": [
+        "매출총이익률 매우 낮음 (47%)",
+        "비용 증가 매출 초과 (0.8x)"
+      ],
+      "strengths": [
+        "ROE 152% — 자본 효율성 탁월 (해자 시사)",
+        "ROA 24% — 자산 운용 우수"
+      ]
+    },
+    {
+      "agent": "momentum-analyst",
+      "signal": "buy",
+      "confidence": 0.61,
+      "rationale": "기술적 매수 우세 (61%). MACD 골든크로스 또는 강세 구간.",
+      "risk_flags": [],
+      "strengths": [
+        "MACD 골든크로스 또는 강세 구간",
+        "MACD 히스토그램 확장 — 모멘텀 강화"
+      ]
+    },
+    {
+      "agent": "risk-analyst",
+      "signal": "buy",
+      "confidence": 0.78,
+      "rationale": "매우 낮은 리스크 (5%). Net Debt/EBITDA 0.2x — 부채 상환 여유 충분, 플러스 FCF 106,312,753,152.",
+      "risk_flags": [],
+      "strengths": [
+        "Net Debt/EBITDA 0.2x — 부채 상환 여유 충분",
+        "플러스 FCF 106,312,753,152"
+      ]
+    }
+  ],
+  "price_at_signal": 257.569091796875,
+  "price_current": 255.9199981689453,
+  "return_pct": -0.64,
+  "cached_at": "2026-04-06T16:37:06"
+}
