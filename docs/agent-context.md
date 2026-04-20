@@ -118,3 +118,4 @@ for ticker in candidates:
 | 2026-03-02 | 초기 구조 + 6 에이전트 구현, D/E 보정, 테스트 11/11, GitHub·Actions·Notion 등록 |
 | 2026-03-04 | GitHub Actions 등록, Telegram 양방향 봇, /explore·/scan·/top 명령어 |
 | 2026-03-11 | 유럽 유니버스 추가, 사전 스크리닝 설계·구현, DAX 40 전체, EU 섹터 분리, Actions 최적화 |
+| 2026-04-20 | 전체 스캔(183종목→30→BUY 10개), 비판적 검토, $19,479 포트폴리오 배분, CRM 29주@$188.54·NOW 20주@$99.15 매수, NH시세포착 B+C 복합 설정 |
