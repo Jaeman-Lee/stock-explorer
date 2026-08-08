@@ -1,8 +1,7 @@
 name: Daily Highlights
 
 on:
-  schedule:
-    - cron: "0 1 * * 1-5"  # 평일 01:00 UTC (한국시간 10:00)
+  # 예약 실행은 비활성화했습니다. 필요할 때만 Actions 화면에서 실행합니다.
   workflow_dispatch:
 
 jobs:

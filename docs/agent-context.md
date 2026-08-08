@@ -87,8 +87,8 @@ for ticker in candidates:
 | 워크플로우 | 스케줄 | 내용 |
 |-----------|--------|------|
 | CI | push/PR | pytest 자동 실행 |
-| Daily Highlights | 평일 10:00 KST | `--eu-all --prescreen --min-signal BUY --notify` |
-| Weekend Full Scan | 토요일 10:00 KST | `--eu-all --prescreen --notify` |
+| Daily Highlights | 수동 실행만 (예약 비활성화) | `--eu-all --prescreen --min-signal BUY --notify` |
+| Weekend Full Scan | 수동 실행만 (예약 비활성화) | `--eu-all --prescreen --notify` |
 
 예상 소요: 스크리닝 ~35분 + 풀 분석 ~60분 = **총 1.5시간**
 
