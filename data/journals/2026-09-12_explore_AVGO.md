@@ -1,0 +1,169 @@
+# 종목 탐험 리포트: AVGO (Broadcom Inc.)
+> 분석 시각: 2026-09-12T05:28:14
+
+## 최종 판정
+**⬆⬆ 강력매수** | 신뢰도 **78%** | 합의 유형: **다수결**
+
+### 투표 집계
+- 긍정 5표 / 중립 0표 / 부정 1표
+
+## 에이전트별 의견
+### fundamental-analyst — ⬆⬆ 강력매수 (신뢰도 93%)
+> 펀더멘탈 최상위권 (97%). 높은 매출총이익률 76% (경쟁우위 시사), 우수한 영업이익률 54%.
+
+**핵심 지표:**
+- `gross_margin_pct`: 75.5
+- `operating_margin_pct`: 54.3
+- `net_margin_pct`: 42.9
+- `revenue_growth_yoy_pct`: 85.5
+- `earnings_growth_yoy_pct`: 215.3
+- `dividend_yield_pct`: 72.0
+- `net_debt_to_ebitda`: 0.68
+- `de_note`: D/E 60x — 자사주매입 왜곡 가능, Net Debt 기준 평가
+- `current_ratio`: 2.5
+- `roe_pct`: 44.2
+- `fcf_to_net_income`: 0.8
+- `fundamental_score`: 97/100 (97%)
+
+**강점:**
+- 높은 매출총이익률 76% (경쟁우위 시사)
+- 우수한 영업이익률 54%
+- 고성장 매출 +86% YoY
+- 이익 고성장 +215% YoY
+- 높은 배당수익률 72.0%
+- Net Debt/EBITDA 0.7x — 낮은 실질 부채
+- 높은 ROE 44% (자본효율성 우수)
+
+### valuation-analyst — ⬇ 패스 (신뢰도 65%)
+> 고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.
+
+**핵심 지표:**
+- `trailing P/E`: 46.2
+- `sector_avg_pe`: 26.7
+- `price_to_book`: 17.34
+- `peg_ratio`: 0.36
+- `price_to_fcf`: 56.5
+- `ev_to_ebitda`: 33.7
+- `valuation_score`: 20/100 (20%)
+
+**강점:**
+- PEG 0.36 — 성장성 대비 저평가
+
+**리스크:**
+- ⚠️ trailing P/E 46.2x — 심각한 고평가
+- ⚠️ P/B 17.3x 고평가
+- ⚠️ P/FCF 56.5x 높음
+- ⚠️ EV/EBITDA 33.7x — 섹터 대비 고평가
+
+### growth-analyst — ⬆⬆ 강력매수 (신뢰도 91%)
+> 강한 성장 모멘텀 (90%). 하이퍼 성장 매출 +86% YoY, EPS 고성장 +215% YoY.
+
+**핵심 지표:**
+- `revenue_growth_yoy_pct`: 85.5
+- `eps_growth_yoy_pct`: 215.3
+- `revenue_cagr_3y_pct`: 24.4
+- `analyst_upside_pct`: 46.9
+- `analyst_count`: 47
+- `growth_trend`: sharp_decline
+- `growth_score`: 81/90 (90%)
+
+**강점:**
+- 하이퍼 성장 매출 +86% YoY
+- EPS 고성장 +215% YoY
+- 3년 매출 CAGR 24% — 지속적 고성장
+- 애널리스트 컨센서스 상승 여력 47%
+
+**리스크:**
+- ⚠️ 성장률 변동 불안정
+
+### moat-analyst — ⬆ 매수검토 (신뢰도 70%)
+> 어느 정도의 경쟁우위 (65%). 매출총이익률 76% — 업종 상위권.
+
+**핵심 지표:**
+- `gross_margin_pct`: 75.5
+- `gross_margin_trend`: stable
+- `roe_pct`: 44.2
+- `roa_pct`: 15.4
+- `operating_leverage`: -14.221528658774169
+- `market_cap_rank_pct`: 20.0
+- `moat_score`: 49/75 (65%)
+
+**강점:**
+- 매출총이익률 76% — 업종 상위권
+- ROE 44% — 자본 효율성 탁월 (해자 시사)
+- ROA 15% — 자산 운용 우수
+
+**리스크:**
+- ⚠️ 비용 증가 매출 초과 (-14.2x)
+
+### momentum-analyst — ⬆ 매수검토 (신뢰도 82%)
+> 기술적 매수 우세 (76%). RSI 42 — 저RSI 진입 기회.
+
+**핵심 지표:**
+- `rsi_14`: 42.2
+- `macd`: -7.529
+- `macd_signal`: -7.644
+- `macd_hist`: 0.115
+- `bollinger_position_pct`: 36.6
+- `momentum_score`: 57/75 (76%)
+
+**강점:**
+- RSI 42 — 저RSI 진입 기회
+- MACD 골든크로스 또는 강세 구간
+- MACD 히스토그램 확장 — 모멘텀 강화
+
+### risk-analyst — ⬆ 매수검토 (신뢰도 85%)
+> 매우 낮은 리스크 (0%). Net Debt/EBITDA 0.7x — 부채 상환 여유 충분, 양호한 유동성 current ratio 2.5x.
+
+**핵심 지표:**
+- `net_debt_to_ebitda`: 0.68
+- `net_debt_b`: 35.44
+- `de_note`: D/E 60x — 자사주매입 왜곡 가능성, Net Debt/EBITDA로 평가
+- `current_ratio`: 2.5
+- `risk_score`: 0/55 (0%)
+
+**강점:**
+- Net Debt/EBITDA 0.7x — 부채 상환 여유 충분
+- 양호한 유동성 current ratio 2.5x
+- 플러스 FCF 30,596,499,456
+
+## 교차 반박
+
+**fundamental-analyst** → *valuation-analyst*: fundamental-analyst이(가) valuation-analyst에 반박: '고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.' — 그러나 펀더멘탈 최상위권 (97%). 높은 매출총이익률 76% (경쟁우위 시사), 우수한 영업이익률 54%.
+
+**valuation-analyst** → *fundamental-analyst*: valuation-analyst이(가) fundamental-analyst에 반박: '펀더멘탈 최상위권 (97%). 높은 매출총이익률 76% (경쟁우위 시사), 우수한 영업이익률 54%.' — 그러나 고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.
+
+**growth-analyst** → *valuation-analyst*: growth-analyst이(가) valuation-analyst에 반박: '고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.' — 그러나 강한 성장 모멘텀 (90%). 하이퍼 성장 매출 +86% YoY, EPS 고성장 +215% YoY.
+
+**valuation-analyst** → *growth-analyst*: valuation-analyst이(가) growth-analyst에 반박: '강한 성장 모멘텀 (90%). 하이퍼 성장 매출 +86% YoY, EPS 고성장 +215% YoY.' — 그러나 고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.
+
+**moat-analyst** → *valuation-analyst*: moat-analyst이(가) valuation-analyst에 반박: '고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.' — 그러나 어느 정도의 경쟁우위 (65%). 매출총이익률 76% — 업종 상위권.
+
+**valuation-analyst** → *moat-analyst*: valuation-analyst이(가) moat-analyst에 반박: '어느 정도의 경쟁우위 (65%). 매출총이익률 76% — 업종 상위권.' — 그러나 고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.
+
+**momentum-analyst** → *valuation-analyst*: momentum-analyst이(가) valuation-analyst에 반박: '고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.' — 그러나 기술적 매수 우세 (76%). RSI 42 — 저RSI 진입 기회.
+
+**valuation-analyst** → *momentum-analyst*: valuation-analyst이(가) momentum-analyst에 반박: '기술적 매수 우세 (76%). RSI 42 — 저RSI 진입 기회.' — 그러나 고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.
+
+**risk-analyst** → *valuation-analyst*: risk-analyst이(가) valuation-analyst에 반박: '고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.' — 그러나 매우 낮은 리스크 (0%). Net Debt/EBITDA 0.7x — 부채 상환 여유 충분, 양호한 유동성 current ratio 2.5x.
+
+**valuation-analyst** → *risk-analyst*: valuation-analyst이(가) risk-analyst에 반박: '매우 낮은 리스크 (0%). Net Debt/EBITDA 0.7x — 부채 상환 여유 충분, 양호한 유동성 current ratio 2.5x.' — 그러나 고평가 상태 (20%). trailing P/E 46.2x — 심각한 고평가.
+
+## 투자 thesis
+높은 매출총이익률 76% (경쟁우위 시사) | 하이퍼 성장 매출 +86% YoY | 매출총이익률 76% — 업종 상위권
+
+## 핵심 리스크
+
+- trailing P/E 46.2x — 심각한 고평가
+- P/B 17.3x 고평가
+- P/FCF 56.5x 높음
+- EV/EBITDA 33.7x — 섹터 대비 고평가
+- 성장률 변동 불안정
+- 비용 증가 매출 초과 (-14.2x)
+
+## 진입 조건
+
+- 실적 발표 후 가이던스 확인
+
+---
+*면책조항: 본 리포트는 투자 참고용이며 투자 결정의 최종 책임은 투자자 본인에게 있습니다.*
