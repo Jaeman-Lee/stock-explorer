@@ -1,0 +1,134 @@
+# 종목 탐험 리포트: CRM (Salesforce, Inc.)
+> 분석 시각: 2026-09-23T05:28:25
+
+## 최종 판정
+**⬆ 매수검토** | 신뢰도 **86%** | 합의 유형: **의견분열**
+
+### 투표 집계
+- 긍정 3표 / 중립 3표 / 부정 0표
+
+## 에이전트별 의견
+### fundamental-analyst — ⬆ 매수검토 (신뢰도 81%)
+> 양호한 펀더멘탈 (78%). 높은 매출총이익률 77% (경쟁우위 시사).
+
+**핵심 지표:**
+- `gross_margin_pct`: 77.3
+- `operating_margin_pct`: 21.4
+- `net_margin_pct`: 22.0
+- `revenue_growth_yoy_pct`: 10.8
+- `earnings_growth_yoy_pct`: 118.9
+- `dividend_yield_pct`: 74.0
+- `net_debt_to_ebitda`: 2.4
+- `de_note`: D/E 110x — 자사주매입 왜곡 가능, Net Debt 기준 평가
+- `current_ratio`: 0.84
+- `current_ratio_note`: FCF마진 40%로 유동성 보완
+- `roe_pct`: 19.4
+- `fcf_to_net_income`: 1.84
+- `fundamental_score`: 78/100 (78%)
+
+**강점:**
+- 높은 매출총이익률 77% (경쟁우위 시사)
+- 우수한 영업이익률 21%
+- 이익 고성장 +119% YoY
+- 높은 배당수익률 74.0%
+- FCF/순이익 1.8x — 이익 현금 전환 우수
+
+### valuation-analyst — ⬆⬆ 강력매수 (신뢰도 84%)
+> 매력적인 밸류에이션 (81%). trailing P/E 21.4x — 섹터 평균 대비 소폭 할인, PEG 0.79 — 성장성 대비 저평가.
+
+**핵심 지표:**
+- `trailing P/E`: 21.4
+- `sector_avg_pe`: 28.2
+- `price_to_book`: 5.0
+- `peg_ratio`: 0.79
+- `price_to_fcf`: 10.8
+- `ev_to_ebitda`: 17.3
+- `valuation_score`: 81/100 (81%)
+
+**강점:**
+- trailing P/E 21.4x — 섹터 평균 대비 소폭 할인
+- PEG 0.79 — 성장성 대비 저평가
+- P/FCF 10.8x — 현금흐름 대비 저평가
+- EV/EBITDA 17.3x — 섹터 대비 저평가
+
+### growth-analyst — ⬆ 매수검토 (신뢰도 74%)
+> 견조한 성장세 (67%). EPS 고성장 +119% YoY.
+
+**핵심 지표:**
+- `revenue_growth_yoy_pct`: 10.8
+- `eps_growth_yoy_pct`: 118.9
+- `revenue_cagr_3y_pct`: 9.8
+- `analyst_upside_pct`: 20.8
+- `analyst_count`: 54
+- `growth_trend`: stable
+- `growth_score`: 60/90 (67%)
+
+**강점:**
+- EPS 고성장 +119% YoY
+
+### moat-analyst — ➡ 관심종목 (신뢰도 50%)
+> 해자 약하거나 불명확 (51%). 추가 조사 필요.
+
+**핵심 지표:**
+- `gross_margin_pct`: 77.3
+- `gross_margin_trend`: stable
+- `roe_pct`: 19.4
+- `roa_pct`: 5.7
+- `operating_leverage`: 1.1802194961926158
+- `market_cap_rank_pct`: 0.0
+- `moat_score`: 38/75 (51%)
+
+**강점:**
+- 매출총이익률 77% — 업종 상위권
+- ROE 19% — 업종 상위권
+
+**리스크:**
+- ⚠️ 시장 지위 하위권
+
+### momentum-analyst — ➡ 관심종목 (신뢰도 50%)
+> 기술적 중립 (44%). 추세 방향 확인 후 진입.
+
+**핵심 지표:**
+- `rsi_14`: 52.5
+- `macd`: 10.241
+- `macd_signal`: 14.056
+- `macd_hist`: -3.815
+- `bollinger_position_pct`: 38.8
+- `momentum_score`: 33/75 (44%)
+
+**리스크:**
+- ⚠️ MACD 데드크로스 또는 약세 구간
+
+### risk-analyst — ➡ 관심종목 (신뢰도 55%)
+> 보통 수준의 리스크 (27%). 모니터링 권장.
+
+**핵심 지표:**
+- `net_debt_to_ebitda`: 2.4
+- `net_debt_b`: 30.97
+- `de_note`: D/E 110x — 자사주매입 왜곡 가능성, Net Debt/EBITDA로 평가
+- `current_ratio`: 0.84
+- `current_ratio_note`: FCF마진 40%로 유동성 리스크 경감
+- `risk_score`: 15/55 (27%)
+
+**강점:**
+- 플러스 FCF 17,731,874,816
+
+**리스크:**
+- ⚠️ Net Debt/EBITDA 2.4x — 다소 높음
+
+## 투자 thesis
+높은 매출총이익률 77% (경쟁우위 시사) | trailing P/E 21.4x — 섹터 평균 대비 소폭 할인 | EPS 고성장 +119% YoY
+
+## 핵심 리스크
+
+- 시장 지위 하위권
+- MACD 데드크로스 또는 약세 구간
+- Net Debt/EBITDA 2.4x — 다소 높음
+
+## 진입 조건
+
+- SMA50 근접 조정 시 분할 매수
+- 실적 발표 후 가이던스 확인
+
+---
+*면책조항: 본 리포트는 투자 참고용이며 투자 결정의 최종 책임은 투자자 본인에게 있습니다.*
